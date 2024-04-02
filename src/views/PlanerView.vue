@@ -1,24 +1,27 @@
 <script setup lang="ts">
-import Grid from '@/components/Grid.vue'
+import GridBackground from '@/components/GridBackground.vue'
+import { useGridPositionStore } from '@/stores/gridPosition'
 import interact from 'interactjs'
 import { ref } from 'vue'
+
+const gridPosition = useGridPositionStore()
 
 const plants = ref([
   {
     name: 'carrot',
-    position: { x: 0, y: 0 }
+    position: { x: 100, y: 100 }
   },
   {
     name: 'onion',
-    position: { x: 0, y: 100 }
+    position: { x: 100, y: 200 }
   },
   {
     name: 'tomato',
-    position: { x: 0, y: 200 }
+    position: { x: 100, y: 300 }
   },
   {
     name: 'cucumber',
-    position: { x: 0, y: 300 }
+    position: { x: 100, y: 400 }
   }
 ])
 
@@ -34,18 +37,24 @@ interact('.plant')
         if (!plant) return
         plant.position.x += event.dx
         plant.position.y += event.dy
-        event.target.style.transform = `translate(${plant.position.x}px, ${plant.position.y}px)`
       }
     },
     modifiers: [
       interact.modifiers.snap({
         targets: [interact.createSnapGrid({ x: 50, y: 50 })],
         range: Infinity,
-        relativePoints: [{ x: 0, y: 0 }]
+        relativePoints: [{ x: gridPosition.x, y: gridPosition.y }]
       })
     ]
   })
   .styleCursor(false)
+
+// watch(gridPosition, () => {
+//   plants.value.forEach((plant) => {
+//     plant.position.x += gridPosition.x
+//     plant.position.y += gridPosition.y
+//   })
+// })
 </script>
 
 <template>
@@ -54,6 +63,10 @@ interact('.plant')
       <p>{{ plant.name }}</p>
       <p>{{ plant.position.x }} x {{ plant.position.y }}</p>
     </div>
+    <div class="plant-info">
+      <p>Grid</p>
+      <p>{{ gridPosition.x }} x {{ gridPosition.y }}</p>
+    </div>
   </div>
   <img
     v-for="plant in plants"
@@ -61,20 +74,19 @@ interact('.plant')
     :id="plant.name"
     :src="getPlantImg(plant.name)"
     class="plant"
-    :style="{ transform: `translate(${plant.position.x}px, ${plant.position.y}px)` }"
+    :style="{
+      transform: `translate(${plant.position.x + gridPosition.x}px, ${plant.position.y + gridPosition.y}px)`
+    }"
   />
-  <Grid />
+  <GridBackground />
 </template>
 
 <style scoped>
 .plant {
-  width: 100px;
+  width: 50px;
   touch-action: none;
   user-select: none;
   cursor: grab;
-  padding: 50px;
-  border-radius: 50%;
-  background-color: rgba(0, 255, 13, 0.5);
   position: fixed;
   top: 0;
   left: 0;

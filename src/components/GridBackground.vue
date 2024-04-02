@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { useGridPositionStore } from '@/stores/gridPosition'
 import interact from 'interactjs'
 
-let gridPosition = { x: 0, y: 0 }
+const gridPosition = useGridPositionStore()
 
-function moveGrid(event) {
-  gridPosition.x = (gridPosition.x + event.dx) % 100 // 200 to wielkość obrazu kafelka
-  gridPosition.y = (gridPosition.y + event.dy) % 100
+function moveGrid(event: Interact.DragEvent) {
+  gridPosition.x = (gridPosition.x + event.dx) % 10000
+  gridPosition.y = (gridPosition.y + event.dy) % 10000
+
   event.target.style.backgroundPosition = `${gridPosition.x}px ${gridPosition.y}px`
 }
 
@@ -15,12 +17,12 @@ interact('.grid')
       move: moveGrid
     }
   })
-  .on('down', function (event) {
-    if (event.button === 2) {
-      event.interaction.start({ name: 'drag' }, event.interactable, event.currentTarget)
-    }
-  })
   .styleCursor(false)
+
+// Disable right-click context menu
+// document.oncontextmenu = document.body.oncontextmenu = function () {
+//   return false
+// }
 </script>
 
 <template>
@@ -32,7 +34,7 @@ interact('.grid')
   width: 100%;
   height: 100%;
   background-image: url('../assets/grid.svg');
-  background-size: 100px 100px;
+  background-size: 50px 50px;
   background-repeat: repeat;
 
   cursor: crosshair;
