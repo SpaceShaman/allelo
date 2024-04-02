@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import GridBackground from '@/components/GridBackground.vue'
-import { useGridPositionStore } from '@/stores/gridPosition'
+import { useGridStore } from '@/stores/grid'
 import interact from 'interactjs'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
-const gridPosition = useGridPositionStore()
+const grid = useGridStore()
 
 const plants = ref([
   {
@@ -29,32 +29,36 @@ function getPlantImg(plant: string): string {
   return new URL(`../assets/plants/${plant}.svg`, import.meta.url).href
 }
 
-interact('.plant')
-  .draggable({
-    listeners: {
-      move(event) {
-        const plant = plants.value.find((plant) => plant.name === event.target.id)
-        if (!plant) return
-        plant.position.x += event.dx
-        plant.position.y += event.dy
-      }
-    },
-    modifiers: [
-      interact.modifiers.snap({
-        targets: [interact.createSnapGrid({ x: 50, y: 50 })],
-        range: Infinity,
-        relativePoints: [{ x: gridPosition.x, y: gridPosition.y }]
-      })
-    ]
-  })
-  .styleCursor(false)
-
-// watch(gridPosition, () => {
-//   plants.value.forEach((plant) => {
-//     plant.position.x += gridPosition.x
-//     plant.position.y += gridPosition.y
-//   })
-// })
+function createInteractInstance() {
+  interact('.plant')
+    .draggable({
+      listeners: {
+        move(event) {
+          const plant = plants.value.find((plant) => plant.name === event.target.id)
+          if (!plant) return
+          plant.position.x += event.dx
+          plant.position.y += event.dy
+        }
+      },
+      modifiers: [
+        interact.modifiers.snap({
+          targets: [
+            interact.createSnapGrid({
+              x: grid.size,
+              y: grid.size,
+              offset: { x: grid.x, y: grid.y }
+            })
+          ],
+          relativePoints: [{ x: 0, y: 0 }]
+        })
+      ]
+    })
+    .styleCursor(false)
+}
+watch(grid, () => {
+  createInteractInstance()
+})
+createInteractInstance()
 </script>
 
 <template>
@@ -65,7 +69,7 @@ interact('.plant')
     </div>
     <div class="plant-info">
       <p>Grid</p>
-      <p>{{ gridPosition.x }} x {{ gridPosition.y }}</p>
+      <p>{{ grid.x }} x {{ grid.y }}</p>
     </div>
   </div>
   <img
@@ -75,7 +79,7 @@ interact('.plant')
     :src="getPlantImg(plant.name)"
     class="plant"
     :style="{
-      transform: `translate(${plant.position.x + gridPosition.x}px, ${plant.position.y + gridPosition.y}px)`
+      transform: `translate(${plant.position.x + grid.x}px, ${plant.position.y + grid.y}px)`
     }"
   />
   <GridBackground />

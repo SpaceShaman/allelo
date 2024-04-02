@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useGridPositionStore } from '@/stores/gridPosition'
+import { useGridStore } from '@/stores/grid'
 import interact from 'interactjs'
 
-const gridPosition = useGridPositionStore()
+const grid = useGridStore()
 
 function moveGrid(event: Interact.DragEvent) {
-  gridPosition.x = (gridPosition.x + event.dx) % 10000
-  gridPosition.y = (gridPosition.y + event.dy) % 10000
+  grid.x = (grid.x + event.dx) % 10000
+  grid.y = (grid.y + event.dy) % 10000
 
-  event.target.style.backgroundPosition = `${gridPosition.x}px ${gridPosition.y}px`
+  event.target.style.backgroundPosition = `${grid.x}px ${grid.y}px`
 }
 
 interact('.grid')
