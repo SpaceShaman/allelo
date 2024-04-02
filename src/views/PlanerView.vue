@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import Grid from '@/components/Grid.vue'
 import interact from 'interactjs'
 import { ref } from 'vue'
+
 const plants = ref([
   {
     name: 'carrot',
@@ -29,13 +31,19 @@ interact('.plant')
     listeners: {
       move(event) {
         const plant = plants.value.find((plant) => plant.name === event.target.id)
-        console.log(plant)
         if (!plant) return
         plant.position.x += event.dx
         plant.position.y += event.dy
         event.target.style.transform = `translate(${plant.position.x}px, ${plant.position.y}px)`
       }
-    }
+    },
+    modifiers: [
+      interact.modifiers.snap({
+        targets: [interact.createSnapGrid({ x: 50, y: 50 })],
+        range: Infinity,
+        relativePoints: [{ x: 0, y: 0 }]
+      })
+    ]
   })
   .styleCursor(false)
 </script>
@@ -55,6 +63,7 @@ interact('.plant')
     class="plant"
     :style="{ transform: `translate(${plant.position.x}px, ${plant.position.y}px)` }"
   />
+  <Grid />
 </template>
 
 <style scoped>
@@ -63,7 +72,7 @@ interact('.plant')
   touch-action: none;
   user-select: none;
   cursor: grab;
-  padding: 5px;
+  padding: 50px;
   border-radius: 50%;
   background-color: rgba(0, 255, 13, 0.5);
   position: fixed;
