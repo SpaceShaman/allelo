@@ -7,8 +7,6 @@ const grid = useGridStore()
 function moveGrid(event: Interact.DragEvent) {
   grid.x = (grid.x + event.dx) % 10000
   grid.y = (grid.y + event.dy) % 10000
-
-  event.target.style.backgroundPosition = `${grid.x}px ${grid.y}px`
 }
 
 interact('.grid')
@@ -26,7 +24,13 @@ interact('.grid')
 </script>
 
 <template>
-  <div class="grid"></div>
+  <div
+    class="grid"
+    :style="{
+      backgroundPosition: `${grid.x}px ${grid.y}px`,
+      backgroundSize: `${grid.scale}px ${grid.scale}px`
+    }"
+  ></div>
 </template>
 
 <style scoped>
@@ -34,9 +38,7 @@ interact('.grid')
   width: 100%;
   height: 100%;
   background-image: url('../assets/grid.svg');
-  background-size: 50px 50px;
   background-repeat: repeat;
-
   cursor: crosshair;
   user-select: none;
   touch-action: none;

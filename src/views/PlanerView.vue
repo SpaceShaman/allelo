@@ -44,8 +44,8 @@ function createInteractInstance() {
         interact.modifiers.snap({
           targets: [
             interact.createSnapGrid({
-              x: grid.size,
-              y: grid.size,
+              x: grid.scale,
+              y: grid.scale,
               offset: { x: grid.x, y: grid.y }
             })
           ],
@@ -59,6 +59,15 @@ watch(grid, () => {
   createInteractInstance()
 })
 createInteractInstance()
+
+// const handleWheel = (event) => {
+//   event.preventDefault()
+//   grid.scale += event.deltaY * -0.001
+//   // Ogranicz skalę
+//   grid.scale = Math.min(Math.max(0.001, grid.scale), 2)
+// }
+
+// window.addEventListener('wheel', handleWheel, { passive: false })
 </script>
 
 <template>
@@ -79,7 +88,8 @@ createInteractInstance()
     :src="getPlantImg(plant.name)"
     class="plant"
     :style="{
-      transform: `translate(${plant.position.x + grid.x}px, ${plant.position.y + grid.y}px)`
+      transform: `translate(${plant.position.x + grid.x}px, ${plant.position.y + grid.y}px)`,
+      width: `${grid.scale}px`
     }"
   />
   <GridBackground />
@@ -87,7 +97,6 @@ createInteractInstance()
 
 <style scoped>
 .plant {
-  width: 50px;
   touch-action: none;
   user-select: none;
   cursor: grab;
