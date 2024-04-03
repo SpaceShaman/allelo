@@ -44,30 +44,36 @@ function createInteractInstances() {
     })
     .styleCursor(false)
 
-  // interact('.plant')
-  //   .draggable({
-  //     listeners: {
-  //       move(event) {
-  //         const plant = plants.value.find((plant) => plant.name === event.target.id)
-  //         if (!plant) return
-  //         plant.position.x += event.dx
-  //         plant.position.y += event.dy
-  //       }
-  //     },
-  //     modifiers: [
-  //       interact.modifiers.snap({
-  //         targets: [
-  //           interact.createSnapGrid({
-  //             x: grid.scale,
-  //             y: grid.scale,
-  //             offset: { x: grid.realX, y: grid.realY }
-  //           })
-  //         ],
-  //         relativePoints: [{ x: 0, y: 0 }]
-  //       })
-  //     ]
-  //   })
-  //   .styleCursor(false)
+  interact('.plant')
+    .draggable({
+      listeners: {
+        move(event) {
+          const plant = plants.value.find((plant) => plant.name === event.target.id)
+          if (!plant) return
+          plant.position.x = Math.round(
+            (plant.position.x * (size * viewport.value.scale) + event.dx) /
+              (size * viewport.value.scale)
+          )
+          plant.position.y = Math.round(
+            (plant.position.y * (size * viewport.value.scale) + event.dy) /
+              (size * viewport.value.scale)
+          )
+        }
+      },
+      modifiers: [
+        interact.modifiers.snap({
+          targets: [
+            interact.createSnapGrid({
+              x: size * viewport.value.scale,
+              y: size * viewport.value.scale,
+              offset: { x: viewport.value.x, y: viewport.value.y }
+            })
+          ],
+          relativePoints: [{ x: 0, y: 0 }]
+        })
+      ]
+    })
+    .styleCursor(false)
 }
 watch(viewport, () => {
   createInteractInstances()
