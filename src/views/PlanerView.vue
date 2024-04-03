@@ -2,7 +2,8 @@
 import interact from 'interactjs'
 import { ref, watch } from 'vue'
 
-const size: number = 50
+const plantSize: number = 50
+const gridSize: number = 25
 
 const viewport = ref({ x: 0, y: 0, scale: 1 })
 
@@ -48,12 +49,12 @@ function createInteractInstances() {
           if (!plant) return
 
           plant.position.x = Math.round(
-            (plant.position.x * size * viewport.value.scale + event.dx) /
-              (size * viewport.value.scale)
+            (plant.position.x * gridSize * viewport.value.scale + event.dx) /
+              (gridSize * viewport.value.scale)
           )
           plant.position.y = Math.round(
-            (plant.position.y * size * viewport.value.scale + event.dy) /
-              (size * viewport.value.scale)
+            (plant.position.y * gridSize * viewport.value.scale + event.dy) /
+              (gridSize * viewport.value.scale)
           )
         }
       },
@@ -61,8 +62,8 @@ function createInteractInstances() {
         interact.modifiers.snap({
           targets: [
             interact.createSnapGrid({
-              x: size * viewport.value.scale,
-              y: size * viewport.value.scale,
+              x: gridSize * viewport.value.scale,
+              y: gridSize * viewport.value.scale,
               offset: { x: viewport.value.x, y: viewport.value.y }
             })
           ],
@@ -104,15 +105,15 @@ window.addEventListener('wheel', handleWheel, { passive: false })
     :src="getPlantImg(plant.name)"
     class="plant"
     :style="{
-      transform: `translate(${plant.position.x * (size * viewport.scale) + viewport.x}px, ${plant.position.y * (size * viewport.scale) + viewport.y}px)`,
-      width: `${size * viewport.scale}px`
+      transform: `translate(${plant.position.x * (gridSize * viewport.scale) + viewport.x}px, ${plant.position.y * (gridSize * viewport.scale) + viewport.y}px)`,
+      width: `${plantSize * viewport.scale}px`
     }"
   />
   <div
     class="grid"
     :style="{
       backgroundPosition: `${viewport.x}px ${viewport.y}px`,
-      backgroundSize: `${size * viewport.scale}px ${size * viewport.scale}px`
+      backgroundSize: `${gridSize * viewport.scale}px ${gridSize * viewport.scale}px`
     }"
   ></div>
 </template>
