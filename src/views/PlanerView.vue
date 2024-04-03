@@ -28,17 +28,13 @@ function getPlantImg(plant: string): string {
   return new URL(`../assets/plants/${plant}.svg`, import.meta.url).href
 }
 
-function moveGrid(event: Interact.DragEvent) {
-  viewport.value.x += event.dx
-  viewport.value.y += event.dy
-}
-
 function createInteractInstances() {
   interact('.grid')
     .draggable({
       listeners: {
         move(event) {
-          moveGrid(event)
+          viewport.value.x += event.dx
+          viewport.value.y += event.dy
         }
       }
     })
@@ -75,8 +71,6 @@ function createInteractInstances() {
       ]
     })
     .styleCursor(false)
-  console.log('scale', viewport.value.scale)
-  console.log('viewport', viewport.value.x, viewport.value.y)
 }
 watch(viewport.value, () => {
   createInteractInstances()
@@ -86,7 +80,6 @@ createInteractInstances()
 const handleWheel = (event: WheelEvent) => {
   event.preventDefault()
   viewport.value.scale += event.deltaY * -0.001
-  // Ogranicz skalę
   viewport.value.scale = Math.min(Math.max(0.1, viewport.value.scale), 10)
 }
 
