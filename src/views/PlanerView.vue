@@ -51,12 +51,14 @@ function createInteractInstances() {
           const plant = plants.value.find((plant) => plant.name === event.target.id)
           if (!plant) return
 
-          plant.position.x =
+          plant.position.x = Math.round(
             (plant.position.x * size * viewport.value.scale + event.dx) /
-            (size * viewport.value.scale)
-          plant.position.y =
+              (size * viewport.value.scale)
+          )
+          plant.position.y = Math.round(
             (plant.position.y * size * viewport.value.scale + event.dy) /
-            (size * viewport.value.scale)
+              (size * viewport.value.scale)
+          )
         }
       },
       modifiers: [
