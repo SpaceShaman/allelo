@@ -1,73 +1,87 @@
 <script setup lang="ts">
-import GridBackground from '@/components/GridBackground.vue'
-import { useGridStore } from '@/stores/grid'
 import interact from 'interactjs'
 import { ref, watch } from 'vue'
 
-const grid = useGridStore()
+const size: number = 50
+
+const viewport = ref({ x: 0, y: 0, scale: 1 })
 
 const plants = ref([
   {
     name: 'carrot',
-    position: { x: 100, y: 100 }
+    position: { x: 1, y: 1 }
   },
   {
     name: 'onion',
-    position: { x: 100, y: 200 }
+    position: { x: 1, y: 2 }
   },
   {
     name: 'tomato',
-    position: { x: 100, y: 300 }
+    position: { x: 1, y: 3 }
   },
   {
     name: 'cucumber',
-    position: { x: 100, y: 400 }
+    position: { x: 1, y: 4 }
   }
 ])
-
 function getPlantImg(plant: string): string {
   return new URL(`../assets/plants/${plant}.svg`, import.meta.url).href
 }
 
-function createInteractInstance() {
-  interact('.plant')
+function moveGrid(event: Interact.DragEvent) {
+  viewport.value.x += event.dx
+  viewport.value.y += event.dy
+}
+
+function createInteractInstances() {
+  interact('.grid')
     .draggable({
       listeners: {
         move(event) {
-          const plant = plants.value.find((plant) => plant.name === event.target.id)
-          if (!plant) return
-          plant.position.x += event.dx
-          plant.position.y += event.dy
+          moveGrid(event)
         }
-      },
-      modifiers: [
-        interact.modifiers.snap({
-          targets: [
-            interact.createSnapGrid({
-              x: grid.scale,
-              y: grid.scale,
-              offset: { x: grid.x, y: grid.y }
-            })
-          ],
-          relativePoints: [{ x: 0, y: 0 }]
-        })
-      ]
+      }
     })
     .styleCursor(false)
+
+  // interact('.plant')
+  //   .draggable({
+  //     listeners: {
+  //       move(event) {
+  //         const plant = plants.value.find((plant) => plant.name === event.target.id)
+  //         if (!plant) return
+  //         plant.position.x += event.dx
+  //         plant.position.y += event.dy
+  //       }
+  //     },
+  //     modifiers: [
+  //       interact.modifiers.snap({
+  //         targets: [
+  //           interact.createSnapGrid({
+  //             x: grid.scale,
+  //             y: grid.scale,
+  //             offset: { x: grid.realX, y: grid.realY }
+  //           })
+  //         ],
+  //         relativePoints: [{ x: 0, y: 0 }]
+  //       })
+  //     ]
+  //   })
+  //   .styleCursor(false)
 }
-watch(grid, () => {
-  createInteractInstance()
+watch(viewport, () => {
+  createInteractInstances()
 })
-createInteractInstance()
+createInteractInstances()
 
-// const handleWheel = (event) => {
-//   event.preventDefault()
-//   grid.scale += event.deltaY * -0.001
-//   // Ogranicz skalę
-//   grid.scale = Math.min(Math.max(0.001, grid.scale), 2)
-// }
+const handleWheel = (event: WheelEvent) => {
+  event.preventDefault()
+  viewport.value.scale += event.deltaY * -0.001
+  // Ogranicz skalę
+  viewport.value.scale = Math.min(Math.max(0.1, viewport.value.scale), 10)
+}
 
-// window.addEventListener('wheel', handleWheel, { passive: false })
+window.addEventListener('wheel', handleWheel, { passive: false })
 </script>
 
 <template>
@@ -77,8 +91,8 @@ createInteractInstance()
       <p>{{ plant.position.x }} x {{ plant.position.y }}</p>
     </div>
     <div class="plant-info">
-      <p>Grid</p>
-      <p>{{ grid.x }} x {{ grid.y }}</p>
+      <p>Viewport</p>
+      <p>{{ viewport.x }} x {{ viewport.y }} x {{ viewport.scale }}</p>
     </div>
   </div>
   <img
@@ -88,14 +102,33 @@ createInteractInstance()
     :src="getPlantImg(plant.name)"
     class="plant"
     :style="{
-      transform: `translate(${plant.position.x + grid.x}px, ${plant.position.y + grid.y}px)`,
-      width: `${grid.scale}px`
+      transform: `translate(${plant.position.x * (size * viewport.scale) + viewport.x}px, ${plant.position.y * (size * viewport.scale) + viewport.y}px)`,
+      width: `${size * viewport.scale}px`
     }"
   />
-  <GridBackground />
+  <div
+    class="grid"
+    :style="{
+      backgroundPosition: `${viewport.x}px ${viewport.y}px`,
+      backgroundSize: `${size * viewport.scale}px ${size * viewport.scale}px`
+    }"
+  ></div>
 </template>
 
 <style scoped>
+.grid {
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/grid.svg');
+  background-repeat: repeat;
+  cursor: crosshair;
+  user-select: none;
+  touch-action: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
 .plant {
   touch-action: none;
   user-select: none;
