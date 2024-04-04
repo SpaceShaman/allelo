@@ -1,11 +1,6 @@
 <template>
-  <header>
-    <div class="wrapper">
-      <!-- <nav>
+  <!-- <nav>
         <RouterLink :to="{ name: 'planer' }">Planer</RouterLink>
       </nav> -->
-    </div>
-  </header>
-
   <RouterView />
 </template>
