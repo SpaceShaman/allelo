@@ -31,6 +31,26 @@ watch(toggle, (value) => {
         <v-img :src="getPlantSvg(plant.name)"></v-img>
       </v-icon>
     </v-btn>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props">
+          <v-icon style="--v-icon-size-multiplier: 1.5">
+            <v-img :src="getPlantSvg('strawberry')"></v-img>
+          </v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="plant in plants"
+          :key="plant.name"
+          :value="plant.name"
+        >
+          <v-icon style="--v-icon-size-multiplier: 1.5">
+            <v-img :src="getPlantSvg(plant.name)"></v-img>
+          </v-icon>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <ColorModeButton />
   </v-btn-toggle>
 </template>
