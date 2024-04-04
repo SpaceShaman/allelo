@@ -1,12 +1,10 @@
 <script setup lang="ts">
+import { viewportStore } from "@/store";
 import { getPlantSvg } from "@/utils";
 import interact from "interactjs";
 import { ref, watch } from "vue";
 
-const plantSize: number = 50;
-const gridSize: number = 25;
-
-const viewport = ref({ x: 0, y: 0, scale: 1 });
+const viewport = viewportStore();
 
 const plants = ref([
   {
@@ -28,17 +26,6 @@ const plants = ref([
 ]);
 
 function createInteractInstances() {
-  interact(".grid")
-    .draggable({
-      listeners: {
-        move(event) {
-          viewport.value.x += event.dx;
-          viewport.value.y += event.dy;
-        },
-      },
-    })
-    .styleCursor(false);
-
   interact(".plant")
     .draggable({
       listeners: {
@@ -49,12 +36,12 @@ function createInteractInstances() {
           if (!plant) return;
 
           plant.position.x = Math.round(
-            (plant.position.x * gridSize * viewport.value.scale + event.dx) /
-              (gridSize * viewport.value.scale)
+            (plant.position.x * viewport.gridSize * viewport.scale + event.dx) /
+              (viewport.gridSize * viewport.scale)
           );
           plant.position.y = Math.round(
-            (plant.position.y * gridSize * viewport.value.scale + event.dy) /
-              (gridSize * viewport.value.scale)
+            (plant.position.y * viewport.gridSize * viewport.scale + event.dy) /
+              (viewport.gridSize * viewport.scale)
           );
         },
       },
@@ -62,9 +49,9 @@ function createInteractInstances() {
         interact.modifiers.snap({
           targets: [
             interact.createSnapGrid({
-              x: gridSize * viewport.value.scale,
-              y: gridSize * viewport.value.scale,
-              offset: { x: viewport.value.x, y: viewport.value.y },
+              x: viewport.gridSize * viewport.scale,
+              y: viewport.gridSize * viewport.scale,
+              offset: { x: viewport.x, y: viewport.y },
             }),
           ],
           relativePoints: [{ x: 0, y: 0 }],
@@ -73,15 +60,15 @@ function createInteractInstances() {
     })
     .styleCursor(false);
 }
-watch(viewport.value, () => {
+watch(viewport, () => {
   createInteractInstances();
 });
 createInteractInstances();
 
 const handleWheel = (event: WheelEvent) => {
   event.preventDefault();
-  viewport.value.scale += event.deltaY * -0.001;
-  viewport.value.scale = Math.min(Math.max(0.1, viewport.value.scale), 10);
+  viewport.scale += event.deltaY * -0.001;
+  viewport.scale = Math.min(Math.max(0.1, viewport.scale), 10);
 };
 
 window.addEventListener("wheel", handleWheel, { passive: false });
@@ -106,37 +93,18 @@ window.addEventListener("wheel", handleWheel, { passive: false });
     class="plant"
     :style="{
       transform: `translate(${
-        plant.position.x * (gridSize * viewport.scale) + viewport.x
-      }px, ${plant.position.y * (gridSize * viewport.scale) + viewport.y}px)`,
-      width: `${plantSize * viewport.scale}px`,
+        plant.position.x * (viewport.gridSize * viewport.scale) + viewport.x
+      }px, ${
+        plant.position.y * (viewport.gridSize * viewport.scale) + viewport.y
+      }px)`,
+      width: `${viewport.plantSize * viewport.scale}px`,
     }"
   />
-  <div
-    class="grid"
-    :style="{
-      backgroundPosition: `${viewport.x}px ${viewport.y}px`,
-      backgroundSize: `${gridSize * viewport.scale}px ${
-        gridSize * viewport.scale
-      }px`,
-    }"
-  ></div>
+  <Grid />
   <Toolbar />
 </template>
 
 <style scoped>
-.grid {
-  width: 100%;
-  height: 100%;
-  background-image: url("../assets/grid.svg");
-  background-repeat: repeat;
-  cursor: crosshair;
-  user-select: none;
-  touch-action: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
 .plant {
   touch-action: none;
   user-select: none;
