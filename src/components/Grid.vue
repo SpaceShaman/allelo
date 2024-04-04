@@ -43,13 +43,13 @@ window.addEventListener("wheel", handleWheel, { passive: false });
   ></div>
 </template>
 
-<style scoped>
+<style>
 .grid {
   width: 100%;
   height: 100%;
-  background-image: url("../assets/grid.svg");
+  background-image: linear-gradient(to right, grey 2px, transparent 2px),
+    linear-gradient(to bottom, grey 2px, transparent 2px);
   background-repeat: repeat;
-  stroke: #e91e63;
   cursor: crosshair;
   user-select: none;
   touch-action: none;
@@ -57,5 +57,8 @@ window.addEventListener("wheel", handleWheel, { passive: false });
   top: 0;
   left: 0;
   z-index: 0;
+}
+svg g line {
+  stroke: forestgreen !important;
 }
 </style>

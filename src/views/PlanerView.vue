@@ -75,7 +75,7 @@ window.addEventListener("wheel", handleWheel, { passive: false });
 </script>
 
 <template>
-  <div class="info">
+  <v-card class="info" elevation="3">
     <div v-for="plant in plants" :key="plant.name" class="plant-info">
       <p>{{ plant.name }}</p>
       <p>{{ plant.position.x }} x {{ plant.position.y }}</p>
@@ -84,7 +84,7 @@ window.addEventListener("wheel", handleWheel, { passive: false });
       <p>Viewport</p>
       <p>{{ viewport.x }} x {{ viewport.y }} x {{ viewport.scale }}</p>
     </div>
-  </div>
+  </v-card>
   <img
     v-for="plant in plants"
     :key="plant.name"
@@ -116,9 +116,8 @@ window.addEventListener("wheel", handleWheel, { passive: false });
 }
 .info {
   position: fixed;
-  top: 0;
-  right: 0;
-  background-color: rgba(53, 190, 25, 0.8);
+  top: 20px;
+  right: 10px;
   z-index: 2;
 }
 .plant-info {
