@@ -10,19 +10,19 @@ const viewport = ref({ x: 0, y: 0, scale: 1 })
 const plants = ref([
   {
     name: 'carrot',
-    position: { x: 1, y: 1 }
+    position: { x: 5, y: 2 }
   },
   {
     name: 'onion',
-    position: { x: 1, y: 2 }
+    position: { x: 5, y: 4 }
   },
   {
     name: 'tomato',
-    position: { x: 1, y: 3 }
+    position: { x: 5, y: 6 }
   },
   {
     name: 'cucumber',
-    position: { x: 1, y: 4 }
+    position: { x: 5, y: 8 }
   }
 ])
 function getPlantImg(plant: string): string {
