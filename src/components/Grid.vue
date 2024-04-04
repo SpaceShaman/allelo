@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { viewportStore } from "@/store";
+import { viewportStore } from "@/stores";
 import interact from "interactjs";
 import { watch } from "vue";
 
@@ -69,3 +69,4 @@ window.addEventListener("wheel", handleWheel, { passive: false });
   z-index: 0;
 }
 </style>
+@/stores

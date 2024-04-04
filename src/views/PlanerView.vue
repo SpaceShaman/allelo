@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { plantsStore, viewportStore } from "@/store";
+import { plantsStore, viewportStore } from "@/stores";
 
 const viewport = viewportStore();
 const plants = plantsStore();
@@ -35,3 +35,4 @@ const plants = plantsStore();
   z-index: 2;
 }
 </style>
+@/stores

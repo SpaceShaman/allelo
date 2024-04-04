@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { plantsStore, viewportStore } from "@/store";
+import { plantsStore, viewportStore } from "@/stores";
 import { getPlantSvg } from "@/utils";
 import interact from "interactjs";
 import { watch } from "vue";
@@ -77,3 +77,4 @@ createInteractInstances();
   z-index: 1;
 }
 </style>
+@/stores
