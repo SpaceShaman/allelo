@@ -6,15 +6,21 @@ const plants = plantsStore();
 </script>
 
 <template>
-  <v-card class="info" elevation="3">
-    <div v-for="plant in plants.planted" :key="plant.name" class="plant-info">
-      <p>{{ plant.name }}</p>
-      <p>{{ plant.position.x }} x {{ plant.position.y }}</p>
-    </div>
-    <div class="plant-info">
-      <p>Viewport</p>
-      <p>{{ viewport.x }} x {{ viewport.y }} x {{ viewport.scale }}</p>
-    </div>
+  <v-card class="info" elevation="2">
+    <v-card
+      title="Viewport"
+      :text="`${viewport.x} x ${viewport.y} x ${viewport.scale.toFixed(1)}`"
+      variant="text"
+    >
+    </v-card>
+    <v-card
+      v-for="plant in plants.planted"
+      :key="plant.name"
+      :title="`${plant.name}-${plant.id}`"
+      :text="`${plant.position.x} x ${plant.position.y}`"
+      variant="text"
+    >
+    </v-card>
   </v-card>
   <Plants />
   <Grid />
@@ -25,12 +31,7 @@ const plants = plantsStore();
 .info {
   position: fixed;
   top: 20px;
-  right: 10px;
+  right: 20px;
   z-index: 2;
-}
-.plant-info {
-  display: inline-block;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 </style>
