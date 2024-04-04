@@ -30,3 +30,12 @@ const toggle = ref("move");
     </v-btn>
   </v-btn-toggle>
 </template>
+<style scoped>
+.v-btn-toggle {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+}
+</style>

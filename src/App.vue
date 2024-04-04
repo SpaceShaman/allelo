@@ -1,6 +1,7 @@
 <template>
-  <!-- <nav>
-        <RouterLink :to="{ name: 'planer' }">Planer</RouterLink>
-      </nav> -->
-  <RouterView />
+  <v-app>
+    <v-main>
+      <RouterView />
+    </v-main>
+  </v-app>
 </template>

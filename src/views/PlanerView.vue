@@ -135,7 +135,7 @@ window.addEventListener("wheel", handleWheel, { passive: false });
   position: absolute;
   top: 0;
   left: 0;
-  z-index: -1;
+  z-index: 0;
 }
 .plant {
   touch-action: none;
@@ -144,12 +144,14 @@ window.addEventListener("wheel", handleWheel, { passive: false });
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 .info {
   position: fixed;
   top: 0;
   right: 0;
-  background-color: rgba(53, 190, 25, 0.5);
+  background-color: rgba(53, 190, 25, 0.8);
+  z-index: 2;
 }
 .plant-info {
   display: inline-block;
