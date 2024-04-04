@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ColorModeButton: typeof import('./src/components/ColorModeButton.vue')['default']
     Grid: typeof import('./src/components/Grid.vue')['default']
+    Plants: typeof import('./src/components/Plants.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Toolbar: typeof import('./src/components/Toolbar.vue')['default']
