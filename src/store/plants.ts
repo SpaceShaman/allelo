@@ -24,6 +24,11 @@ export const plantsStore = defineStore('plants', () => {
             name: "cucumber",
             position: { x: 5, y: 8 },
         },
+        {
+            id: 4,
+            name: "cucumber",
+            position: { x: 10, y: 8 },
+        },
     ])
 
     return {

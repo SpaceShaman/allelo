@@ -13,7 +13,7 @@ function toggleColorMode() {
 </script>
 
 <template>
-  <v-btn icon @click="toggleColorMode">
+  <v-btn icon @click="toggleColorMode" value="color-mode">
     <v-icon>{{
       mode === "dark" ? "mdi-white-balance-sunny" : "mdi-moon-waning-crescent"
     }}</v-icon>

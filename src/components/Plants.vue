@@ -13,7 +13,7 @@ function createInteractInstances() {
       listeners: {
         move(event) {
           const plant = plants.planted.find(
-            (plant) => plant.name === event.target.id
+            (plant) => `${plant.id}` === event.target.id
           );
           if (!plant) return;
 
@@ -51,8 +51,8 @@ createInteractInstances();
 <template>
   <img
     v-for="plant in plants.planted"
-    :key="plant.name"
-    :id="plant.name"
+    :key="plant.id"
+    :id="`${plant.id}`"
     :src="getPlantSvg(plant.name)"
     class="plant"
     :style="{

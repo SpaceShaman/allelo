@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getPlantSvg } from "@/utils";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const plants = ref([
   {
@@ -18,6 +18,9 @@ const plants = ref([
 ]);
 
 const toggle = ref("move");
+watch(toggle, (value) => {
+  if (value === "color-mode") toggle.value = "move";
+});
 </script>
 
 <template>
