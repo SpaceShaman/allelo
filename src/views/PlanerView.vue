@@ -9,7 +9,7 @@ const plants = plantsStore();
   <v-card class="info" elevation="2">
     <v-card
       title="Viewport"
-      :text="`${viewport.x} x ${viewport.y} x ${viewport.scale.toFixed(1)}`"
+      :text="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
       variant="text"
     >
     </v-card>

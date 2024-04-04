@@ -25,7 +25,9 @@ createInteractInstances();
 const handleWheel = (event: WheelEvent) => {
   event.preventDefault();
   viewport.scale += event.deltaY * -0.001;
-  viewport.scale = Math.min(Math.max(0.1, viewport.scale), 10);
+  viewport.scale = parseFloat(
+    Math.min(Math.max(0.6, viewport.scale), 5).toFixed(1)
+  );
 };
 
 window.addEventListener("wheel", handleWheel, { passive: false });
@@ -39,6 +41,16 @@ window.addEventListener("wheel", handleWheel, { passive: false });
       backgroundSize: `${viewport.gridSize * viewport.scale}px ${
         viewport.gridSize * viewport.scale
       }px`,
+      backgroundImage: `linear-gradient(
+          to right,
+          rgb(var(--v-theme-on-surface-variant)) ${viewport.scale * 2.1}px,
+          transparent 0px
+        ),
+        linear-gradient(
+          to bottom,
+          rgb(var(--v-theme-on-surface-variant)) ${viewport.scale * 2.1}px,
+          transparent 0px
+        )`,
     }"
   ></div>
 </template>
@@ -47,16 +59,6 @@ window.addEventListener("wheel", handleWheel, { passive: false });
 .grid {
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(
-      to right,
-      rgb(var(--v-theme-surface-variant)) 2px,
-      transparent 2px
-    ),
-    linear-gradient(
-      to bottom,
-      rgb(var(--v-theme-surface-variant)) 2px,
-      transparent 2px
-    );
   background-repeat: repeat;
   cursor: crosshair;
   user-select: none;
