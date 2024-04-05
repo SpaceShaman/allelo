@@ -1,0 +1,31 @@
+{
+  "name": "onion",
+  "friends": [
+    {
+      "name": "carrot",
+      "buff": "attack",
+      "value": 1,
+      "distance": 4
+    },
+    {
+      "name": "garlic",
+      "buff": "defense",
+      "value": 3,
+      "distance": 2
+    }
+  ],
+  "enemys": [
+    {
+      "name": "potato",
+      "buff": "attack",
+      "value": -2,
+      "distance": 3
+    },
+    {
+      "name": "tomato",
+      "buff": "defense",
+      "value": -4,
+      "distance": 1
+    }
+  ]
+}

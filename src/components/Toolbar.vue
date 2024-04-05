@@ -2,36 +2,29 @@
 import { getPlantSvg } from "@/utils";
 import { ref, watch } from "vue";
 
-const plants = ref([
-  {
-    name: "carrot",
-  },
-  {
-    name: "onion",
-  },
-  {
-    name: "tomato",
-  },
-  {
-    name: "cucumber",
-  },
+const plants = ref<string[]>([
+  "carrot",
+  "onion",
+  "tomato",
+  "cucumber",
+  "strawberry",
 ]);
 
-const toggle = ref("move");
-watch(toggle, (value) => {
-  if (value === "color-mode") toggle.value = "move";
+const toggle = ref<string>("move");
+watch(toggle, (value: string, oldValue: string) => {
+  if (value === "color-mode") toggle.value = oldValue;
 });
 </script>
 
 <template>
-  <v-btn-toggle v-model="toggle" mandatory elevation="2">
+  <v-btn-toggle v-model="toggle" elevation="2">
     <v-btn icon="mdi-cursor-move" value="move"></v-btn>
-    <v-btn v-for="plant in plants" :key="plant.name" :value="plant.name">
+    <v-btn v-for="plant in plants" :key="plant" :value="plant">
       <v-icon style="--v-icon-size-multiplier: 1.5">
-        <v-img :src="getPlantSvg(plant.name)"></v-img>
+        <v-img :src="getPlantSvg(plant)"></v-img>
       </v-icon>
     </v-btn>
-    <v-menu>
+    <!-- <v-menu>
       <template v-slot:activator="{ props }">
         <v-btn v-bind="props">
           <v-icon style="--v-icon-size-multiplier: 1.5">
@@ -42,15 +35,15 @@ watch(toggle, (value) => {
       <v-list>
         <v-list-item
           v-for="plant in plants"
-          :key="plant.name"
-          :value="plant.name"
+          :key="plant"
+          :value="plant"
         >
           <v-icon style="--v-icon-size-multiplier: 1.5">
-            <v-img :src="getPlantSvg(plant.name)"></v-img>
+            <v-img :src="getPlantSvg(plant)"></v-img>
           </v-icon>
         </v-list-item>
       </v-list>
-    </v-menu>
+    </v-menu> -->
     <ColorModeButton />
   </v-btn-toggle>
 </template>
