@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { plantsStore, viewportStore } from "@/stores";
+import { usePlantedStore, viewportStore } from "@/stores";
 import { getPlantSvg } from "@/utils";
 import interact from "interactjs";
 import { watch } from "vue";
 
 const viewport = viewportStore();
-const plants = plantsStore();
+const plantedStore = usePlantedStore();
 
 function createInteractInstances() {
   interact(".plant")
     .draggable({
       listeners: {
         move(event) {
-          const plant = plants.planted.find(
+          const plant = plantedStore.planted.find(
             (plant) => `${plant.id}` === event.target.id
           );
           if (!plant) return;
@@ -50,7 +50,7 @@ createInteractInstances();
 
 <template>
   <img
-    v-for="plant in plants.planted"
+    v-for="plant in plantedStore.planted"
     :key="plant.id"
     :id="`${plant.id}`"
     :src="getPlantSvg(plant.name)"

@@ -1,18 +1,11 @@
 <script setup lang="ts">
-import { plantsStore, viewportStore } from "@/stores";
+import plants from "@/plants";
+import { usePlantedStore, viewportStore } from "@/stores";
 import { getPlantSvg } from "@/utils";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
-const plants = plantsStore();
-
-const menuItems = ref<string[]>([
-  "carrot",
-  "onion",
-  "tomato",
-  "cucumber",
-  "strawberry",
-]);
+const plantedStore = usePlantedStore();
 
 const selected = ref<string>("move");
 watch(selected, (value: string, oldValue: string) => {
@@ -20,8 +13,8 @@ watch(selected, (value: string, oldValue: string) => {
 });
 
 function addPlant(plant: string) {
-  plants.planted.push({
-    id: plants.planted.length,
+  plantedStore.planted.push({
+    id: plantedStore.planted.length,
     name: plant,
     position: {
       x: Math.round(
@@ -50,9 +43,9 @@ document.addEventListener("contextmenu", (e) => e.preventDefault());
 <template>
   <v-btn-toggle v-model="selected" elevation="2">
     <v-btn icon="mdi-cursor-move" value="move"></v-btn>
-    <v-btn v-for="plant in menuItems" :key="plant" :value="plant">
+    <v-btn v-for="plant in plants" :key="plant.name" :value="plant.name">
       <v-icon style="--v-icon-size-multiplier: 1.5">
-        <v-img :src="getPlantSvg(plant)"></v-img>
+        <v-img :src="getPlantSvg(plant.name)"></v-img>
       </v-icon>
     </v-btn>
     <!-- <v-menu>

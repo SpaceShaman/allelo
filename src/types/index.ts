@@ -1,1 +1,3 @@
-export * from './plant';
+export * from './Plant';
+export * from './PlantOnGrid';
+

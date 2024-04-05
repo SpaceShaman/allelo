@@ -1,9 +1,9 @@
-import { Plant } from '@/types';
+import { PlantOnGrid } from '@/types';
 import { defineStore } from "pinia";
 import { ref } from 'vue';
 
-export const plantsStore = defineStore('plants', () => {
-    const planted = ref<Plant[]>([
+export const usePlantedStore = defineStore('plants', () => {
+    const planted = ref<PlantOnGrid[]>([
         {
             id: 0,
             name: "carrot",

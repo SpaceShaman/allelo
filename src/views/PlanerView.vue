@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { plantsStore, viewportStore } from "@/stores";
+import { usePlantedStore, viewportStore } from "@/stores";
 
 const viewport = viewportStore();
-const plants = plantsStore();
+const plants = usePlantedStore();
 </script>
 
 <template>
