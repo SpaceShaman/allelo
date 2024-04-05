@@ -6,7 +6,7 @@ import { watch } from "vue";
 const viewport = viewportStore();
 
 function createInteractInstances() {
-  interact(".grid")
+  interact("#grid")
     .draggable({
       listeners: {
         move(event) {
@@ -35,7 +35,7 @@ window.addEventListener("wheel", handleWheel, { passive: false });
 
 <template>
   <div
-    class="grid"
+    id="grid"
     :style="{
       backgroundPosition: `${viewport.x}px ${viewport.y}px`,
       backgroundSize: `${viewport.gridSize * viewport.scale}px ${
@@ -56,7 +56,7 @@ window.addEventListener("wheel", handleWheel, { passive: false });
 </template>
 
 <style scoped>
-.grid {
+#grid {
   width: 100%;
   height: 100%;
   background-repeat: repeat;

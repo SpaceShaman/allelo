@@ -11,16 +11,19 @@ const plants = plantsStore();
       title="Viewport"
       :text="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
       variant="text"
-    >
-    </v-card>
+    />
+    <v-card
+      title="Mouse"
+      :text="`${viewport.mouse.x} x ${viewport.mouse.y}`"
+      variant="text"
+    />
     <v-card
       v-for="plant in plants.planted"
       :key="plant.name"
       :title="`${plant.name}-${plant.id}`"
       :text="`${plant.position.x} x ${plant.position.y}`"
       variant="text"
-    >
-    </v-card>
+    />
   </v-card>
   <Plants />
   <Grid />
