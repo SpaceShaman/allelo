@@ -13,7 +13,7 @@ watch(selected, (value: string, oldValue: string) => {
 
 function addPlant(plant: string) {
   plantedStore.planted.push({
-    id: plantedStore.planted.length,
+    id: Date.now(),
     name: plant,
     position: {
       x: Math.round(
