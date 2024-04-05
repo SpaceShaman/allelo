@@ -6,7 +6,7 @@ const plants = usePlantedStore();
 </script>
 
 <template>
-  <v-card class="info" elevation="2">
+  <v-card class="info overflow-auto" elevation="2">
     <!-- <v-card
       title="Viewport"
       :text="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
@@ -20,8 +20,8 @@ const plants = usePlantedStore();
     <v-card
       v-for="plant in plants.planted"
       :key="plant.name"
-      :title="`${plant.name}-${plant.id}`"
-      :text="`${plant.position.x} x ${plant.position.y}`"
+      :title="plant.name"
+      :subtitle="`${plant.position.x} x ${plant.position.y}`"
       variant="text"
     >
       <template v-slot:prepend>
@@ -37,9 +37,9 @@ const plants = usePlantedStore();
 <style scoped>
 .info {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  right: 0;
+  margin: 20px;
+  max-height: calc(100vh - 40px);
   z-index: 2;
 }
 </style>
-@/stores

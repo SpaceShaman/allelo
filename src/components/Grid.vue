@@ -23,11 +23,14 @@ watch(viewport, () => {
 createInteractInstances();
 
 const handleWheel = (event: WheelEvent) => {
-  event.preventDefault();
-  viewport.scale += event.deltaY * -0.001;
-  viewport.scale = parseFloat(
-    Math.min(Math.max(0.6, viewport.scale), 5).toFixed(1)
-  );
+  const target = event.target as HTMLElement;
+  if (target.id === "grid" || target.classList.contains("plant")) {
+    event.preventDefault();
+    viewport.scale += event.deltaY * -0.001;
+    viewport.scale = parseFloat(
+      Math.min(Math.max(0.6, viewport.scale), 5).toFixed(1)
+    );
+  }
 };
 
 window.addEventListener("wheel", handleWheel, { passive: false });
