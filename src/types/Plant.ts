@@ -4,6 +4,13 @@ export interface Plant {
     friends?: {
         name: string;
         reason: string;
+        range: number;
+        growthSpeed?: number;
+    }[];
+    enemies?: {
+        name: string;
+        reason: string;
+        range: number;
         growthSpeed?: number;
     }[];
 }

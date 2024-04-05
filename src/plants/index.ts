@@ -8,14 +8,30 @@ const plants: Plant[] = [
             {
                 name: 'carrot',
                 reason: 'grows well together',
+                range: 4,
                 growthSpeed: 1
             },
             {
-                name: 'lettuce',
+                name: 'cucumber',
                 reason: 'grows well together',
+                range: 3,
                 growthSpeed: 2
             }
         ],
+        enemies: [
+            {
+                name: 'tomato',
+                reason: 'grows poorly together',
+                range: 5,
+                growthSpeed: -0.5
+            },
+            {
+                name: 'strawberry',
+                reason: 'grows poorly together',
+                range: 3,
+                growthSpeed: -1
+            }
+        ]
     },
     {
         name: 'carrot',
