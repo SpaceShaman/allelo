@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import plants from "@/plants";
 import { usePlantedStore, viewportStore } from "@/stores";
-import { getPlantSvg } from "@/utils";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
@@ -44,9 +43,7 @@ document.addEventListener("contextmenu", (e) => e.preventDefault());
   <v-btn-toggle v-model="selected" elevation="2">
     <v-btn icon="mdi-cursor-move" value="move"></v-btn>
     <v-btn v-for="plant in plants" :key="plant.name" :value="plant.name">
-      <v-icon style="--v-icon-size-multiplier: 1.5">
-        <v-img :src="getPlantSvg(plant.name)"></v-img>
-      </v-icon>
+      <PlantIcon :name="plant.name" />
     </v-btn>
     <!-- <v-menu>
       <template v-slot:activator="{ props }">

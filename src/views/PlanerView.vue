@@ -7,23 +7,27 @@ const plants = usePlantedStore();
 
 <template>
   <v-card class="info" elevation="2">
-    <v-card
+    <!-- <v-card
       title="Viewport"
       :text="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
       variant="text"
-    />
-    <v-card
+    /> -->
+    <!-- <v-card
       title="Mouse"
       :text="`${viewport.mouse.x} x ${viewport.mouse.y}`"
       variant="text"
-    />
+    /> -->
     <v-card
       v-for="plant in plants.planted"
       :key="plant.name"
       :title="`${plant.name}-${plant.id}`"
       :text="`${plant.position.x} x ${plant.position.y}`"
       variant="text"
-    />
+    >
+      <template v-slot:prepend>
+        <PlantIcon :name="plant.name" />
+      </template>
+    </v-card>
   </v-card>
   <Plants />
   <Grid />
