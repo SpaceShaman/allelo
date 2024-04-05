@@ -26,13 +26,18 @@ function addPlant(plant: string) {
   });
 }
 
+function deletePlant(id: number) {
+  plantedStore.planted = plantedStore.planted.filter(
+    (plant) => plant.id !== id
+  );
+}
+
 document.addEventListener("mousedown", (e) => {
-  if (
-    (e.target as HTMLElement).id === "grid" &&
-    selected.value !== "move" &&
-    e.button === 0
-  ) {
+  const target = e.target as HTMLElement;
+  if (target.id === "grid" && selected.value !== "move" && e.button === 0) {
     addPlant(selected.value);
+  } else if (target.classList.contains("plant") && e.button === 2) {
+    deletePlant(parseInt(target.id));
   }
 });
 // disable right-click context menu
