@@ -35,11 +35,20 @@ watch(viewport.mouse, (mouse) => {
       plant.position.y = (mouse.y - viewport.y) / viewport.scale;
     }
   }
-  // Right mouse button pressed
-  else if (mouse.pressed && mouse.button === 2) {
+  // Middle mouse button pressed
+  else if (mouse.pressed && mouse.button === 1) {
     // Remove a plant
     if (mouse.target.className === "plant") {
       plants.removePlant(Number(mouse.target.id));
+    }
+  }
+  // Right mouse button pressed
+  else if (mouse.pressed && mouse.button === 2) {
+    // Grid pressed
+    if (mouse.target.id === "grid") {
+      // Move viewport with the mouse
+      viewport.x += mouse.moveX;
+      viewport.y += mouse.moveY;
     }
   }
 });
