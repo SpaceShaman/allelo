@@ -2,63 +2,56 @@
 import { usePlantedStore, viewportStore } from "@/stores";
 import { getPlantSvg } from "@/utils";
 import interact from "interactjs";
+import { storeToRefs } from "pinia";
 import { watch } from "vue";
 
 const viewport = viewportStore();
+const { scale } = storeToRefs(viewport);
+
 const plantedStore = usePlantedStore();
 
-function createInteractInstances() {
-  interact(".plant")
-    .draggable({
-      listeners: {
-        move(event) {
-          const plant = plantedStore.planted.find(
-            (plant) => `${plant.id}` === event.target.id
-          );
-          if (!plant) return;
+const interactPlants = interact(".plant").styleCursor(false);
 
-          plant.position.x = Math.round(
-            (plant.position.x * viewport.gridSize * viewport.scale + event.dx) /
-              (viewport.gridSize * viewport.scale)
-          );
-          plant.position.y = Math.round(
-            (plant.position.y * viewport.gridSize * viewport.scale + event.dy) /
-              (viewport.gridSize * viewport.scale)
-          );
-        },
+function setupInteractPlants() {
+  interactPlants.draggable({
+    listeners: {
+      move(event) {
+        const plant = plantedStore.planted.find(
+          (plant) => `${plant.id}` === event.target.id
+        );
+        if (!plant) return;
+
+        plant.position.x = Math.round(
+          (plant.position.x * viewport.gridSize * viewport.scale + event.dx) /
+            (viewport.gridSize * viewport.scale)
+        );
+        plant.position.y = Math.round(
+          (plant.position.y * viewport.gridSize * viewport.scale + event.dy) /
+            (viewport.gridSize * viewport.scale)
+        );
       },
-      modifiers: [
-        interact.modifiers.snap({
-          targets: [
-            interact.createSnapGrid({
-              x: viewport.gridSize * viewport.scale,
-              y: viewport.gridSize * viewport.scale,
-              offset: { x: viewport.x, y: viewport.y },
-            }),
-          ],
-          relativePoints: [{ x: 0, y: 0 }],
-        }),
-      ],
-    })
-    .styleCursor(false);
-}
-watch(viewport, () => {
-  createInteractInstances();
-});
-createInteractInstances();
-
-for (let i = 0; i < 100; i++) {
-  plantedStore.planted.push({
-    id: i + 300,
-    name: "tomato",
-    position: {
-      x: 20,
-      y: 20 + i,
     },
+    modifiers: [
+      interact.modifiers.snap({
+        targets: [
+          interact.createSnapGrid({
+            x: viewport.gridSize * viewport.scale,
+            y: viewport.gridSize * viewport.scale,
+            offset: { x: viewport.x, y: viewport.y },
+          }),
+        ],
+        relativePoints: [{ x: 0, y: 0 }],
+      }),
+    ],
   });
 }
 
-for (let i = 20; i < 100; i++) {
+watch(scale, () => {
+  setupInteractPlants();
+});
+setupInteractPlants();
+
+for (let i = 0; i < 100; i++) {
   plantedStore.planted.push({
     id: i,
     name: "onion",
@@ -82,6 +75,16 @@ for (let i = 200; i < 300; i++) {
   plantedStore.planted.push({
     id: i,
     name: "carrot",
+    position: {
+      x: Math.round(i * Math.cos(i * 0.5) * 0.15 + 20),
+      y: Math.round(i * Math.sin(i * 0.5) * 0.15 + 20),
+    },
+  });
+}
+for (let i = 300; i < 400; i++) {
+  plantedStore.planted.push({
+    id: i,
+    name: "cucumber",
     position: {
       x: Math.round(i * Math.cos(i * 0.5) * 0.15 + 20),
       y: Math.round(i * Math.sin(i * 0.5) * 0.15 + 20),

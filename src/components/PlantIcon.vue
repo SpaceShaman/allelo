@@ -4,7 +4,7 @@ import { defineProps, withDefaults } from "vue";
 
 interface Props {
   name: string;
-  size: number;
+  size?: number;
 }
 
 const props = withDefaults(defineProps<Props>(), {
