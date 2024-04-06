@@ -49,6 +49,17 @@ createInteractInstances();
 
 for (let i = 0; i < 100; i++) {
   plantedStore.planted.push({
+    id: i + 300,
+    name: "tomato",
+    position: {
+      x: 20,
+      y: 20 + i,
+    },
+  });
+}
+
+for (let i = 20; i < 100; i++) {
+  plantedStore.planted.push({
     id: i,
     name: "onion",
     position: {
