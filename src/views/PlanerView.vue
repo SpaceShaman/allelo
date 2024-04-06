@@ -7,7 +7,7 @@ const plants = plantsStore();
 
 <template>
   <v-card class="info overflow-auto" elevation="2">
-    <v-card
+    <!-- <v-card
       title="Viewport"
       :subtitle="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
       variant="text"
@@ -17,12 +17,12 @@ const plants = plantsStore();
       :subtitle="`${viewport.mouse.x} x ${viewport.mouse.y}`"
       :text="`${viewport.mouse.pressed} ${viewport.mouse.button} ${viewport.mouse.target?.id} \n${viewport.mouse.moveX} x ${viewport.mouse.moveY}`"
       variant="text"
-    />
+    /> -->
     <v-card
       v-for="plant in plants.planted"
       :key="plant.name"
       :title="plant.name"
-      :subtitle="`${plant.position.x} x ${plant.position.y}`"
+      :subtitle="`${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`"
       variant="text"
     >
       <template v-slot:prepend>
