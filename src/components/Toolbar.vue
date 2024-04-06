@@ -1,51 +1,20 @@
 <script setup lang="ts">
 import plants from "@/plants";
-import { plantsStore, viewportStore } from "@/stores";
-import { ref, watch } from "vue";
+import { toolbarStore } from "@/stores";
+import { watch } from "vue";
 
-const viewport = viewportStore();
-const plantedStore = plantsStore();
+const toolbar = toolbarStore();
 
-const selected = ref<string>("move");
-watch(selected, (value: string, oldValue: string) => {
-  if (value === "color-mode") selected.value = oldValue;
-});
-
-function addPlant(plant: string) {
-  plantedStore.planted.push({
-    id: Date.now(),
-    name: plant,
-    position: {
-      x: Math.round(
-        viewport.mouse.x / (viewport.gridSize * viewport.scale) - 1
-      ),
-      y: Math.round(
-        viewport.mouse.y / (viewport.gridSize * viewport.scale) - 1
-      ),
-    },
-  });
-}
-
-function deletePlant(id: number) {
-  plantedStore.planted = plantedStore.planted.filter(
-    (plant) => plant.id !== id
-  );
-}
-
-// document.addEventListener("mousedown", (e) => {
-//   const target = e.target as HTMLElement;
-//   if (target.id === "grid" && selected.value !== "move" && e.button === 0) {
-//     addPlant(selected.value);
-//   } else if (target.classList.contains("plant") && e.button === 2) {
-//     deletePlant(parseInt(target.id));
-//   }
-// });
-// disable right-click context menu
-document.addEventListener("contextmenu", (e) => e.preventDefault());
+watch(
+  () => toolbar.selected,
+  (value: string, oldValue: string) => {
+    if (value === "color-mode") toolbar.selected = oldValue;
+  }
+);
 </script>
 
 <template>
-  <v-btn-toggle v-model="selected" elevation="2">
+  <v-btn-toggle v-model="toolbar.selected" elevation="2">
     <v-btn icon="mdi-cursor-move" value="move"></v-btn>
     <v-btn v-for="plant in plants" :key="plant.name" :value="plant.name">
       <PlantIcon :name="plant.name" />

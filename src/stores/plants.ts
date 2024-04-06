@@ -40,9 +40,19 @@ export const plantsStore = defineStore('plants', () => {
     const getPlantById = (id: number) => {
         return planted.value.find(plant => plant.id === id)
     }
+
+    const addPlant = (plant: string, x: number, y: number) => {
+        planted.value.push({
+            id: Date.now(),
+            name: plant,
+            position: { x, y }
+        })
+    }
+
     return {
+        plantSize,
         planted,
         getPlantById,
-        plantSize
+        addPlant,
     }
 })

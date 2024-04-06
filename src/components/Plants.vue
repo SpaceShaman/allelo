@@ -17,8 +17,10 @@ const plants = plantsStore();
     draggable="false"
     :style="{
       transform: `translate(${
-        plant.position.x * viewport.scale + viewport.x
-      }px, ${plant.position.y * viewport.scale + viewport.y}px)`,
+        (plant.position.x - plants.plantSize / 2) * viewport.scale + viewport.x
+      }px, ${
+        (plant.position.y - plants.plantSize / 2) * viewport.scale + viewport.y
+      }px)`,
       width: `${plants.plantSize * viewport.scale}px`,
     }"
   />
