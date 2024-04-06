@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import plants from "@/plants";
-import { usePlantedStore, viewportStore } from "@/stores";
+import { plantsStore, viewportStore } from "@/stores";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
-const plantedStore = usePlantedStore();
+const plantedStore = plantsStore();
 
 const selected = ref<string>("move");
 watch(selected, (value: string, oldValue: string) => {
@@ -32,14 +32,14 @@ function deletePlant(id: number) {
   );
 }
 
-document.addEventListener("mousedown", (e) => {
-  const target = e.target as HTMLElement;
-  if (target.id === "grid" && selected.value !== "move" && e.button === 0) {
-    addPlant(selected.value);
-  } else if (target.classList.contains("plant") && e.button === 2) {
-    deletePlant(parseInt(target.id));
-  }
-});
+// document.addEventListener("mousedown", (e) => {
+//   const target = e.target as HTMLElement;
+//   if (target.id === "grid" && selected.value !== "move" && e.button === 0) {
+//     addPlant(selected.value);
+//   } else if (target.classList.contains("plant") && e.button === 2) {
+//     deletePlant(parseInt(target.id));
+//   }
+// });
 // disable right-click context menu
 document.addEventListener("contextmenu", (e) => e.preventDefault());
 </script>

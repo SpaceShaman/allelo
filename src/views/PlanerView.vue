@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import { usePlantedStore, viewportStore } from "@/stores";
+import { plantsStore, viewportStore } from "@/stores";
 
 const viewport = viewportStore();
-const plants = usePlantedStore();
+const plants = plantsStore();
 </script>
 
 <template>
   <v-card class="info overflow-auto" elevation="2">
-    <!-- <v-card
+    <v-card
       title="Viewport"
-      :text="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
+      :subtitle="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
       variant="text"
-    /> -->
-    <!-- <v-card
+    />
+    <v-card
       title="Mouse"
-      :text="`${viewport.mouse.x} x ${viewport.mouse.y}`"
+      :subtitle="`${viewport.mouse.x} x ${viewport.mouse.y}`"
+      :text="`${viewport.mouse.pressed} ${viewport.mouse.button} ${viewport.mouse.target?.id} \n${viewport.mouse.moveX} x ${viewport.mouse.moveY}`"
       variant="text"
-    /> -->
+    />
     <v-card
       v-for="plant in plants.planted"
       :key="plant.name"
@@ -32,6 +33,7 @@ const plants = usePlantedStore();
   <Plants />
   <Grid />
   <Toolbar />
+  <Actions />
 </template>
 
 <style scoped>

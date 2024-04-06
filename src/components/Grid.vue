@@ -1,39 +1,7 @@
 <script setup lang="ts">
 import { viewportStore } from "@/stores";
-import interact from "interactjs";
-import { watch } from "vue";
 
 const viewport = viewportStore();
-
-function createInteractInstances() {
-  interact("#grid")
-    .draggable({
-      listeners: {
-        move(event) {
-          viewport.x += event.dx;
-          viewport.y += event.dy;
-        },
-      },
-    })
-    .styleCursor(false);
-}
-watch(viewport, () => {
-  createInteractInstances();
-});
-createInteractInstances();
-
-const handleWheel = (event: WheelEvent) => {
-  const target = event.target as HTMLElement;
-  if (target.id === "grid" || target.classList.contains("plant")) {
-    event.preventDefault();
-    viewport.scale += event.deltaY * -0.001;
-    viewport.scale = parseFloat(
-      Math.min(Math.max(0.6, viewport.scale), 5).toFixed(1)
-    );
-  }
-};
-
-window.addEventListener("wheel", handleWheel, { passive: false });
 </script>
 
 <template>
