@@ -46,6 +46,37 @@ watch(viewport, () => {
   createInteractInstances();
 });
 createInteractInstances();
+
+for (let i = 0; i < 100; i++) {
+  plantedStore.planted.push({
+    id: i,
+    name: "onion",
+    position: {
+      x: Math.round(i * Math.cos(i * 0.5) * 0.15 + 20),
+      y: Math.round(i * Math.sin(i * 0.5) * 0.15 + 20),
+    },
+  });
+}
+for (let i = 100; i < 200; i++) {
+  plantedStore.planted.push({
+    id: i,
+    name: "strawberry",
+    position: {
+      x: Math.round(i * Math.cos(i * 0.5) * 0.15 + 20),
+      y: Math.round(i * Math.sin(i * 0.5) * 0.15 + 20),
+    },
+  });
+}
+for (let i = 200; i < 300; i++) {
+  plantedStore.planted.push({
+    id: i,
+    name: "carrot",
+    position: {
+      x: Math.round(i * Math.cos(i * 0.5) * 0.15 + 20),
+      y: Math.round(i * Math.sin(i * 0.5) * 0.15 + 20),
+    },
+  });
+}
 </script>
 
 <template>
