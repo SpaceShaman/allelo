@@ -5,26 +5,27 @@ import { watch } from "vue";
 const viewport = viewportStore();
 const plants = plantsStore();
 
+// Mouse actions
 watch(viewport.mouse, (mouse) => {
   if (!mouse.target) return;
-  if (mouse.target.className === "plant") {
-    if (mouse.pressed && mouse.button === 0) {
-      console.log("Plant dragged", mouse.target.id);
-      const plant = plants.getPlantById(Number(mouse.target.id));
-      if (!plant) return;
-      if (plant.position.x !== mouse.x || plant.position.y !== mouse.y) {
-        plant.position.x = mouse.x;
-        plant.position.y = mouse.y;
-      }
-    }
-  } else if (mouse.target.id === "grid") {
-    if (mouse.pressed && mouse.button === 0) {
+  // Left mouse button pressed
+  if (mouse.pressed && mouse.button === 0) {
+    // Move viewport with the mouse
+    if (mouse.target.id === "grid") {
       viewport.x += mouse.moveX;
       viewport.y += mouse.moveY;
+    }
+    // Drag a plant
+    else if (mouse.target.className === "plant") {
+      const plant = plants.getPlantById(Number(mouse.target.id));
+      if (!plant) return;
+      plant.position.x += mouse.moveX;
+      plant.position.y += mouse.moveY;
     }
   }
 });
 
+// Zoom in and out with the mouse wheel
 const handleWheel = (event: WheelEvent) => {
   const target = event.target as HTMLElement;
   if (target.id === "grid" || target.classList.contains("plant")) {
