@@ -22,8 +22,8 @@ watch(viewport.mouse, (mouse) => {
       else {
         plants.addPlant(
           toolbar.selected,
-          (mouse.x + viewport.x) / viewport.scale,
-          (mouse.y + viewport.y) / viewport.scale
+          (mouse.x - viewport.x) / viewport.scale,
+          (mouse.y - viewport.y) / viewport.scale
         );
       }
     }
@@ -31,8 +31,8 @@ watch(viewport.mouse, (mouse) => {
     else if (mouse.target.className === "plant") {
       const plant = plants.getPlantById(Number(mouse.target.id));
       if (!plant) return;
-      plant.position.x += mouse.moveX;
-      plant.position.y += mouse.moveY;
+      plant.position.x = (mouse.x - viewport.x) / viewport.scale;
+      plant.position.y = (mouse.y - viewport.y) / viewport.scale;
     }
   }
   // Right mouse button pressed
