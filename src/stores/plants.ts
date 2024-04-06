@@ -49,10 +49,15 @@ export const plantsStore = defineStore('plants', () => {
         })
     }
 
+    const removePlant = (id: number) => {
+        planted.value = planted.value.filter(plant => plant.id !== id)
+    }
+
     return {
         plantSize,
         planted,
         getPlantById,
         addPlant,
+        removePlant,
     }
 })

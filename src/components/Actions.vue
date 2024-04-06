@@ -35,6 +35,13 @@ watch(viewport.mouse, (mouse) => {
       plant.position.y += mouse.moveY;
     }
   }
+  // Right mouse button pressed
+  else if (mouse.pressed && mouse.button === 2) {
+    // Remove a plant
+    if (mouse.target.className === "plant") {
+      plants.removePlant(Number(mouse.target.id));
+    }
+  }
 });
 
 // Zoom in and out with the mouse wheel
