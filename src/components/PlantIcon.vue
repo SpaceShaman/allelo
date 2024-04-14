@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getPlantSvg } from "@/utils";
-import { defineProps, withDefaults } from "vue";
+import { withDefaults } from "vue";
 
 interface Props {
   name: string;

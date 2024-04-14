@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
+import { PlantOnGrid } from "@/types";
 import { watch } from "vue";
 
 const viewport = viewportStore();
 const plants = plantsStore();
 const toolbar = toolbarStore();
+
+var movingPlant: undefined | PlantOnGrid = undefined;
+document.addEventListener("mouseup", (e) => {
+  movingPlant = undefined;
+});
 
 // Mouse actions
 watch(viewport.mouse, (mouse) => {
@@ -12,7 +18,7 @@ watch(viewport.mouse, (mouse) => {
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // Grid pressed
-    if (mouse.target.id === "grid") {
+    if (mouse.target.id === "grid" && !movingPlant) {
       // Move viewport with the mouse
       if (toolbar.selected === "move") {
         viewport.x += mouse.moveX;
@@ -29,10 +35,7 @@ watch(viewport.mouse, (mouse) => {
     }
     // Drag a plant
     else if (mouse.target.className === "plant") {
-      const plant = plants.getPlantById(Number(mouse.target.id));
-      if (!plant) return;
-      plant.position.x = (mouse.x - viewport.x) / viewport.scale;
-      plant.position.y = (mouse.y - viewport.y) / viewport.scale;
+      movingPlant = plants.getPlantById(Number(mouse.target.id));
     }
   }
   // Middle mouse button pressed
@@ -50,6 +53,11 @@ watch(viewport.mouse, (mouse) => {
       viewport.x += mouse.moveX;
       viewport.y += mouse.moveY;
     }
+  }
+  // Move plant with the mouse
+  if (movingPlant) {
+    movingPlant.position.x = (mouse.x - viewport.x) / viewport.scale;
+    movingPlant.position.y = (mouse.y - viewport.y) / viewport.scale;
   }
 });
 
