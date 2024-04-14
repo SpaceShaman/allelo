@@ -14,12 +14,16 @@ const viewport = viewportStore();
       }px`,
       backgroundImage: `linear-gradient(
           to right,
-          rgb(var(--v-theme-on-surface-variant)) ${viewport.scale * 2.1}px,
+          rgb(var(--v-theme-on-surface-variant)) ${Math.ceil(
+            viewport.scale * 2
+          )}px,
           transparent 0px
         ),
         linear-gradient(
           to bottom,
-          rgb(var(--v-theme-on-surface-variant)) ${viewport.scale * 2.1}px,
+          rgb(var(--v-theme-on-surface-variant)) ${Math.ceil(
+            viewport.scale * 2
+          )}px,
           transparent 0px
         )`,
     }"
@@ -40,4 +44,3 @@ const viewport = viewportStore();
   z-index: 0;
 }
 </style>
-@/stores

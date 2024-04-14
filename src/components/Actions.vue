@@ -16,7 +16,7 @@ document.addEventListener("mouseup", (e) => {
 watch(viewport.mouse, (mouse) => {
   if (!mouse.target) return;
   // Left mouse button pressed
-  if (mouse.pressed && mouse.button === 0) {
+  if (mouse.pressed && mouse.button === 0 && !movingPlant) {
     // Grid pressed
     if (mouse.target.id === "grid" && !movingPlant) {
       // Move viewport with the mouse
@@ -68,7 +68,7 @@ const handleWheel = (event: WheelEvent) => {
     event.preventDefault();
     viewport.scale += event.deltaY * -0.001;
     viewport.scale = parseFloat(
-      Math.min(Math.max(0.6, viewport.scale), 5).toFixed(1)
+      Math.min(Math.max(0.1, viewport.scale), 5).toFixed(1)
     );
   }
 };
@@ -77,3 +77,4 @@ window.addEventListener("wheel", handleWheel, { passive: false });
 // disable right-click context menu
 document.addEventListener("contextmenu", (e) => e.preventDefault());
 </script>
+<template></template>
