@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
-import { PlantOnGrid } from "@/types";
+import type { PlantOnGrid } from "@/types";
 import { watch } from "vue";
 
 const viewport = viewportStore();
