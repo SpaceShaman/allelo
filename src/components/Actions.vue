@@ -63,14 +63,24 @@ watch(viewport.mouse, (mouse) => {
 
 // Zoom in and out with the mouse wheel
 const handleWheel = (event: WheelEvent) => {
-  const target = event.target as HTMLElement;
-  if (target.id === "grid" || target.classList.contains("plant")) {
-    event.preventDefault();
-    viewport.scale += event.deltaY * -0.001;
-    viewport.scale = parseFloat(
-      Math.min(Math.max(0.1, viewport.scale), 5).toFixed(1)
-    );
-  }
+  event.preventDefault();
+
+  // Calculate the point on the screen that should remain fixed during scaling
+  const x = viewport.mouse.x;
+  const y = viewport.mouse.y;
+
+  // Calculate the new scale
+  let newScale = viewport.scale + event.deltaY * -0.001;
+  newScale = parseFloat(Math.min(Math.max(0.1, newScale), 5).toFixed(1));
+
+  // Calculate the new position of the viewport
+  const newX = x - (x - viewport.x) * (newScale / viewport.scale);
+  const newY = y - (y - viewport.y) * (newScale / viewport.scale);
+
+  // Update the scale and position of the viewport
+  viewport.scale = newScale;
+  viewport.x = newX;
+  viewport.y = newY;
 };
 window.addEventListener("wheel", handleWheel, { passive: false });
 
