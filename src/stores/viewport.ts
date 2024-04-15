@@ -17,10 +17,10 @@ export const viewportStore = defineStore('viewport', () => {
         target: ref<HTMLElement | undefined>(),
     }
     const selectArea = {
-        x: ref(100),
-        y: ref(100),
-        width: ref(300),
-        height: ref(300),
+        x: ref(0),
+        y: ref(0),
+        width: ref(0),
+        height: ref(0),
     }
 
     document.addEventListener('mousedown', (e) => {

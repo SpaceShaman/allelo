@@ -7,9 +7,14 @@ const plants = plantsStore();
 
 <template>
   <v-card class="info overflow-auto" elevation="2">
-    <!-- <v-card
+    <v-card
       title="Viewport"
       :subtitle="`${viewport.x} x ${viewport.y} x ${viewport.scale}`"
+      variant="text"
+    />
+    <v-card
+      title="Select Area"
+      :subtitle="`${viewport.selectArea.x} x ${viewport.selectArea.y} x ${viewport.selectArea.width} x ${viewport.selectArea.height}`"
       variant="text"
     />
     <v-card
@@ -17,7 +22,7 @@ const plants = plantsStore();
       :subtitle="`${viewport.mouse.x} x ${viewport.mouse.y}`"
       :text="`${viewport.mouse.pressed} ${viewport.mouse.button} ${viewport.mouse.target?.id} \n${viewport.mouse.moveX} x ${viewport.mouse.moveY}`"
       variant="text"
-    /> -->
+    />
     <v-card
       v-for="plant in plants.selected"
       :key="plant.name"

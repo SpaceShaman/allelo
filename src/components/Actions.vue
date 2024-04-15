@@ -112,9 +112,15 @@ document.addEventListener("contextmenu", (e) => e.preventDefault());
     id="select-area"
     :style="{
       display: selecting ? 'block' : 'none',
-      left: viewport.selectArea.x + 'px',
+      left:
+        viewport.selectArea.width < 0
+          ? viewport.selectArea.x + viewport.selectArea.width + 'px'
+          : viewport.selectArea.x + 'px',
       top: viewport.selectArea.y + 'px',
-      width: viewport.selectArea.width + 'px',
+      width:
+        viewport.selectArea.width < 0
+          ? -viewport.selectArea.width + 'px'
+          : viewport.selectArea.width + 'px',
       height: viewport.selectArea.height + 'px',
     }"
   ></div>
