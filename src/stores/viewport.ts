@@ -13,6 +13,7 @@ export const viewportStore = defineStore('viewport', () => {
         moveY: ref(0),
         pressed: ref(false),
         button: ref(0),
+        ctrl: ref(false),
         target: ref<HTMLElement | undefined>(),
     }
 
@@ -20,11 +21,13 @@ export const viewportStore = defineStore('viewport', () => {
         e.preventDefault()
         mouse.pressed.value = true
         mouse.button.value = e.button
+        mouse.ctrl.value = e.ctrlKey
     })
     document.addEventListener('mouseup', (e) => {
         e.preventDefault()
         mouse.pressed.value = false
         mouse.button.value = 0
+        mouse.ctrl.value = false
     })
     document.addEventListener('mousemove', (e) => {
         e.preventDefault()

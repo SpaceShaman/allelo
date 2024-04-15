@@ -25,9 +25,9 @@ watch(viewport.mouse, (mouse) => {
         viewport.y += mouse.moveY;
       }
       // Add a plant
-      else {
+      else if (toolbar.selected.includes("plant-")) {
         plants.addPlant(
-          toolbar.selected,
+          toolbar.selected.replace("plant-", ""),
           (mouse.x - viewport.x) / viewport.scale,
           (mouse.y - viewport.y) / viewport.scale
         );
@@ -35,7 +35,7 @@ watch(viewport.mouse, (mouse) => {
     }
     // Select a plant
     else if (mouse.target.className === "plant" && !movePlants) {
-      plants.unselectAll();
+      if (!mouse.ctrl) plants.unselectAll();
       plants.select(Number(mouse.target.id));
       movePlants = true;
     }
