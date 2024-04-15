@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
+import { PlantedPlant } from "@/types";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
@@ -18,22 +19,8 @@ watch(viewport.mouse, (mouse) => {
   if (!mouse.target) return;
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
-    // Select area
-    if (toolbar.selected === "select") {
-      if (!selecting.value) {
-        viewport.selectArea.x = mouse.x;
-        viewport.selectArea.y = mouse.y;
-        viewport.selectArea.width = 0;
-        viewport.selectArea.height = 0;
-        selecting.value = true;
-      } else {
-        viewport.selectArea.width = mouse.x - viewport.selectArea.x;
-        viewport.selectArea.height = mouse.y - viewport.selectArea.y;
-      }
-    }
-
     // Grid pressed
-    if (mouse.target.id === "grid" && !movingPlants) {
+    if (mouse.target.id === "grid" && !movingPlants && !selecting.value) {
       plants.unselectAll();
       // Move viewport with the mouse
       if (toolbar.selected === "move") {
@@ -49,8 +36,12 @@ watch(viewport.mouse, (mouse) => {
         );
       }
     }
-    // Select a plant
-    else if (mouse.target.className === "plant" && !movingPlants) {
+    // Select single plant
+    else if (
+      mouse.target.className === "plant" &&
+      !movingPlants &&
+      !selecting.value
+    ) {
       if (!mouse.ctrl) plants.unselectAll();
       plants.select(Number(mouse.target.id));
       movingPlants = true;
@@ -60,6 +51,34 @@ watch(viewport.mouse, (mouse) => {
       plants.selected.forEach((plant) => {
         plant.position.x += mouse.moveX / viewport.scale;
         plant.position.y += mouse.moveY / viewport.scale;
+      });
+    }
+    // Select area
+    if (toolbar.selected === "select" && !movingPlants) {
+      if (!selecting.value) {
+        viewport.selectArea.x = mouse.x;
+        viewport.selectArea.y = mouse.y;
+        viewport.selectArea.width = 0;
+        viewport.selectArea.height = 0;
+        selecting.value = true;
+      } else {
+        viewport.selectArea.width = mouse.x - viewport.selectArea.x;
+        viewport.selectArea.height = mouse.y - viewport.selectArea.y;
+      }
+      // Select plants in the area
+      plants.unselectAll();
+      plants.planted.forEach((plant: PlantedPlant) => {
+        const x = plant.position.x * viewport.scale + viewport.x;
+        const y = plant.position.y * viewport.scale + viewport.y;
+        const size = plants.plantSize * viewport.scale;
+        if (
+          x > viewport.selectArea.x &&
+          x < viewport.selectArea.x + viewport.selectArea.width &&
+          y > viewport.selectArea.y &&
+          y < viewport.selectArea.y + viewport.selectArea.height
+        ) {
+          plants.select(plant.id);
+        }
       });
     }
   }
