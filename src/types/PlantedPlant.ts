@@ -1,4 +1,4 @@
-export interface PlantOnGrid {
+export interface PlantedPlant {
     id: number;
     name: string;
     position: {

@@ -19,7 +19,7 @@ const plants = plantsStore();
       variant="text"
     /> -->
     <v-card
-      v-for="plant in plants.planted"
+      v-for="plant in plants.selected"
       :key="plant.name"
       :title="plant.name"
       :subtitle="`${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`"

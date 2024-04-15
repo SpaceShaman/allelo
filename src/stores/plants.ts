@@ -1,10 +1,10 @@
-import { PlantOnGrid } from '@/types';
+import { PlantedPlant } from '@/types';
 import { defineStore } from "pinia";
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export const plantsStore = defineStore('plants', () => {
     const plantSize = ref(50)
-    const planted = ref<PlantOnGrid[]>([
+    const planted = ref<PlantedPlant[]>([
         {
             id: 0,
             name: "carrot",
@@ -36,10 +36,16 @@ export const plantsStore = defineStore('plants', () => {
             position: { x: 600, y: 100 },
         },
     ])
+    const selectedList = ref<number[]>([0,1])
+
+    const selected = computed(() => {
+        return planted.value.filter(plant => selectedList.value.includes(plant.id))
+    })
 
     const getPlantById = (id: number) => {
         return planted.value.find(plant => plant.id === id)
     }
+
 
     const addPlant = (plant: string, x: number, y: number) => {
         planted.value.push({
@@ -56,6 +62,7 @@ export const plantsStore = defineStore('plants', () => {
     return {
         plantSize,
         planted,
+        selected,
         getPlantById,
         addPlant,
         removePlant,

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
-import type { PlantOnGrid } from "@/types";
+import type { PlantedPlant } from "@/types";
 import { watch } from "vue";
 
 const viewport = viewportStore();
 const plants = plantsStore();
 const toolbar = toolbarStore();
 
-var movingPlant: undefined | PlantOnGrid = undefined;
+var movingPlant: undefined | PlantedPlant = undefined;
 document.addEventListener("mouseup", (e) => {
   movingPlant = undefined;
 });
