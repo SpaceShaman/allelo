@@ -5,4 +5,5 @@ export interface PlantedPlant {
         x: number;
         y: number;
     };
+    selected: boolean;
 }

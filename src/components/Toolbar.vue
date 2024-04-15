@@ -16,6 +16,7 @@ watch(
 <template>
   <v-btn-toggle v-model="toolbar.selected" mandatory elevation="2">
     <v-btn icon="mdi-cursor-move" value="move"></v-btn>
+    <v-btn icon="mdi-select" value="select"></v-btn>
     <v-btn v-for="plant in plants" :key="plant.name" :value="plant.name">
       <PlantIcon :name="plant.name" />
     </v-btn>

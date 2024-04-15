@@ -22,6 +22,7 @@ const plants = plantsStore();
         (plant.position.y - plants.plantSize / 2) * viewport.scale + viewport.y
       }px)`,
       width: `${plants.plantSize * viewport.scale}px`,
+      outline: plant.selected ? '2px solid green' : 'none',
     }"
   />
 </template>

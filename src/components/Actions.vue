@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
-import type { PlantedPlant } from "@/types";
 import { watch } from "vue";
 
 const viewport = viewportStore();
 const plants = plantsStore();
 const toolbar = toolbarStore();
 
-var movingPlant: undefined | PlantedPlant = undefined;
+var movePlants = false;
 document.addEventListener("mouseup", (e) => {
-  movingPlant = undefined;
+  movePlants = false;
 });
 
 // Mouse actions
 watch(viewport.mouse, (mouse) => {
   if (!mouse.target) return;
   // Left mouse button pressed
-  if (mouse.pressed && mouse.button === 0 && !movingPlant) {
+  if (mouse.pressed && mouse.button === 0) {
     // Grid pressed
-    if (mouse.target.id === "grid" && !movingPlant) {
+    if (mouse.target.id === "grid" && !movePlants) {
+      plants.unselectAll();
       // Move viewport with the mouse
       if (toolbar.selected === "move") {
         viewport.x += mouse.moveX;
@@ -33,9 +33,19 @@ watch(viewport.mouse, (mouse) => {
         );
       }
     }
-    // Drag a plant
+    // Select a plant
     else if (mouse.target.className === "plant") {
-      movingPlant = plants.getPlantById(Number(mouse.target.id));
+      plants.select(Number(mouse.target.id));
+      movePlants = true;
+    }
+    // Move plant with the mouse
+    if (plants.selected && movePlants) {
+      plants.selected.forEach((plant) => {
+        // plant.position.x = (mouse.x - viewport.x) / viewport.scale;
+        // plant.position.y = (mouse.y - viewport.y) / viewport.scale;
+        plant.position.x += mouse.moveX / viewport.scale;
+        plant.position.y += mouse.moveY / viewport.scale;
+      });
     }
   }
   // Middle mouse button pressed
@@ -53,11 +63,6 @@ watch(viewport.mouse, (mouse) => {
       viewport.x += mouse.moveX;
       viewport.y += mouse.moveY;
     }
-  }
-  // Move plant with the mouse
-  if (movingPlant) {
-    movingPlant.position.x = (mouse.x - viewport.x) / viewport.scale;
-    movingPlant.position.y = (mouse.y - viewport.y) / viewport.scale;
   }
 });
 
