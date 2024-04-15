@@ -34,15 +34,14 @@ watch(viewport.mouse, (mouse) => {
       }
     }
     // Select a plant
-    else if (mouse.target.className === "plant") {
+    else if (mouse.target.className === "plant" && !movePlants) {
+      plants.unselectAll();
       plants.select(Number(mouse.target.id));
       movePlants = true;
     }
     // Move plant with the mouse
     if (plants.selected && movePlants) {
       plants.selected.forEach((plant) => {
-        // plant.position.x = (mouse.x - viewport.x) / viewport.scale;
-        // plant.position.y = (mouse.y - viewport.y) / viewport.scale;
         plant.position.x += mouse.moveX / viewport.scale;
         plant.position.y += mouse.moveY / viewport.scale;
       });
