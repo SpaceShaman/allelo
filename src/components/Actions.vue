@@ -116,12 +116,18 @@ document.addEventListener("contextmenu", (e) => e.preventDefault());
         viewport.selectArea.width < 0
           ? viewport.selectArea.x + viewport.selectArea.width + 'px'
           : viewport.selectArea.x + 'px',
-      top: viewport.selectArea.y + 'px',
+      top:
+        viewport.selectArea.height < 0
+          ? viewport.selectArea.y + viewport.selectArea.height + 'px'
+          : viewport.selectArea.y + 'px',
       width:
         viewport.selectArea.width < 0
           ? -viewport.selectArea.width + 'px'
           : viewport.selectArea.width + 'px',
-      height: viewport.selectArea.height + 'px',
+      height:
+        viewport.selectArea.height < 0
+          ? -viewport.selectArea.height + 'px'
+          : viewport.selectArea.height + 'px',
     }"
   ></div>
 </template>
@@ -130,5 +136,6 @@ document.addEventListener("contextmenu", (e) => e.preventDefault());
   position: fixed;
   z-index: 10000;
   border: 2px solid green;
+  cursor: crosshair;
 }
 </style>
