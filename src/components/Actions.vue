@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
-import { watch } from "vue";
+import { ref, watch } from "vue";
 
 const viewport = viewportStore();
 const plants = plantsStore();
 const toolbar = toolbarStore();
 
-var movePlants = false;
+var movingPlants = false;
+var selecting = ref(false);
 document.addEventListener("mouseup", (e) => {
-  movePlants = false;
+  movingPlants = false;
+  selecting.value = false;
 });
 
 // Mouse actions
@@ -16,8 +18,22 @@ watch(viewport.mouse, (mouse) => {
   if (!mouse.target) return;
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
+    // Select area
+    if (toolbar.selected === "select") {
+      if (!selecting.value) {
+        viewport.selectArea.x = mouse.x;
+        viewport.selectArea.y = mouse.y;
+        viewport.selectArea.width = 0;
+        viewport.selectArea.height = 0;
+        selecting.value = true;
+      } else {
+        viewport.selectArea.width = mouse.x - viewport.selectArea.x;
+        viewport.selectArea.height = mouse.y - viewport.selectArea.y;
+      }
+    }
+
     // Grid pressed
-    if (mouse.target.id === "grid" && !movePlants) {
+    if (mouse.target.id === "grid" && !movingPlants) {
       plants.unselectAll();
       // Move viewport with the mouse
       if (toolbar.selected === "move") {
@@ -34,13 +50,13 @@ watch(viewport.mouse, (mouse) => {
       }
     }
     // Select a plant
-    else if (mouse.target.className === "plant" && !movePlants) {
+    else if (mouse.target.className === "plant" && !movingPlants) {
       if (!mouse.ctrl) plants.unselectAll();
       plants.select(Number(mouse.target.id));
-      movePlants = true;
+      movingPlants = true;
     }
     // Move plant with the mouse
-    if (plants.selected && movePlants) {
+    if (plants.selected && movingPlants && !selecting.value) {
       plants.selected.forEach((plant) => {
         plant.position.x += mouse.moveX / viewport.scale;
         plant.position.y += mouse.moveY / viewport.scale;
@@ -91,4 +107,22 @@ window.addEventListener("wheel", handleWheel, { passive: false });
 // disable right-click context menu
 document.addEventListener("contextmenu", (e) => e.preventDefault());
 </script>
-<template></template>
+<template>
+  <div
+    id="select-area"
+    :style="{
+      display: selecting ? 'block' : 'none',
+      left: viewport.selectArea.x + 'px',
+      top: viewport.selectArea.y + 'px',
+      width: viewport.selectArea.width + 'px',
+      height: viewport.selectArea.height + 'px',
+    }"
+  ></div>
+</template>
+<style scoped>
+#select-area {
+  position: fixed;
+  z-index: 10000;
+  border: 2px solid green;
+}
+</style>

@@ -16,6 +16,12 @@ export const viewportStore = defineStore('viewport', () => {
         ctrl: ref(false),
         target: ref<HTMLElement | undefined>(),
     }
+    const selectArea = {
+        x: ref(100),
+        y: ref(100),
+        width: ref(300),
+        height: ref(300),
+    }
 
     document.addEventListener('mousedown', (e) => {
         e.preventDefault()
@@ -43,6 +49,7 @@ export const viewportStore = defineStore('viewport', () => {
         y,
         scale,
         gridSize,
-        mouse
+        mouse,
+        selectArea,
     }
 })
