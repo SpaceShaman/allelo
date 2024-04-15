@@ -54,7 +54,11 @@ watch(viewport.mouse, (mouse) => {
       });
     }
     // Select area
-    if (toolbar.selected === "select" && !movingPlants) {
+    if (
+      toolbar.selected === "select" &&
+      !movingPlants &&
+      (mouse.target.id === "grid" || mouse.target.className === "plant")
+    ) {
       if (!selecting.value) {
         viewport.selectArea.x = mouse.x;
         viewport.selectArea.y = mouse.y;
@@ -68,14 +72,24 @@ watch(viewport.mouse, (mouse) => {
       // Select plants in the area
       plants.unselectAll();
       plants.planted.forEach((plant: PlantedPlant) => {
-        const x = plant.position.x * viewport.scale + viewport.x;
-        const y = plant.position.y * viewport.scale + viewport.y;
-        const size = plants.plantSize * viewport.scale;
+        const plantX = plant.position.x * viewport.scale + viewport.x;
+        const plantY = plant.position.y * viewport.scale + viewport.y;
+        const plantSize = plants.plantSize * viewport.scale;
+        let startX = viewport.selectArea.x;
+        let startY = viewport.selectArea.y;
+        let endX = viewport.selectArea.x + viewport.selectArea.width;
+        let endY = viewport.selectArea.y + viewport.selectArea.height;
+        if (startX > endX) {
+          [startX, endX] = [endX, startX];
+        }
+        if (startY > endY) {
+          [startY, endY] = [endY, startY];
+        }
         if (
-          x > viewport.selectArea.x &&
-          x < viewport.selectArea.x + viewport.selectArea.width &&
-          y > viewport.selectArea.y &&
-          y < viewport.selectArea.y + viewport.selectArea.height
+          plantX > startX - plantSize / 2 &&
+          plantX < endX + plantSize / 2 &&
+          plantY > startY - plantSize / 2 &&
+          plantY < endY + plantSize / 2
         ) {
           plants.select(plant.id);
         }
