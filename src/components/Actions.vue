@@ -169,7 +169,7 @@ document.addEventListener("contextmenu", (e) => e.preventDefault());
 #select-area {
   position: fixed;
   z-index: 10000;
-  border: 2px solid green;
+  border: 2px solid rgb(var(--v-theme-primary));
   cursor: crosshair;
 }
 </style>
