@@ -7,6 +7,7 @@ const viewport = viewportStore();
 <template>
   <div
     id="grid"
+    class="grid"
     :style="{
       backgroundPosition: `${viewport.x}px ${viewport.y}px`,
       backgroundSize: `${viewport.gridSize * viewport.scale}px ${

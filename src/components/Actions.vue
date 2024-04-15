@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
-import { PlantedPlant } from "@/types";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
@@ -57,43 +56,43 @@ watch(viewport.mouse, (mouse) => {
     if (
       toolbar.selected === "select" &&
       !movingPlants &&
-      (mouse.target.id === "grid" || mouse.target.className === "plant")
+      ["grid", "plant", "select-area"].includes(mouse.target.className)
     ) {
       if (!selecting.value) {
-        viewport.selectArea.x = mouse.x;
-        viewport.selectArea.y = mouse.y;
-        viewport.selectArea.width = 0;
-        viewport.selectArea.height = 0;
+        viewport.selectArea.startX = mouse.x;
+        viewport.selectArea.startY = mouse.y;
+        viewport.selectArea.endX = mouse.x;
+        viewport.selectArea.endY = mouse.y;
         selecting.value = true;
       } else {
-        viewport.selectArea.width = mouse.x - viewport.selectArea.x;
-        viewport.selectArea.height = mouse.y - viewport.selectArea.y;
+        viewport.selectArea.endX = mouse.x;
+        viewport.selectArea.endY = mouse.y;
       }
       // Select plants in the area
       plants.unselectAll();
-      plants.planted.forEach((plant: PlantedPlant) => {
-        const plantX = plant.position.x * viewport.scale + viewport.x;
-        const plantY = plant.position.y * viewport.scale + viewport.y;
-        const plantSize = plants.plantSize * viewport.scale;
-        let startX = viewport.selectArea.x;
-        let startY = viewport.selectArea.y;
-        let endX = viewport.selectArea.x + viewport.selectArea.width;
-        let endY = viewport.selectArea.y + viewport.selectArea.height;
-        if (startX > endX) {
-          [startX, endX] = [endX, startX];
-        }
-        if (startY > endY) {
-          [startY, endY] = [endY, startY];
-        }
-        if (
-          plantX > startX - plantSize / 2 &&
-          plantX < endX + plantSize / 2 &&
-          plantY > startY - plantSize / 2 &&
-          plantY < endY + plantSize / 2
-        ) {
-          plants.select(plant.id);
-        }
-      });
+      // plants.planted.forEach((plant: PlantedPlant) => {
+      //   const plantX = plant.position.x * viewport.scale + viewport.x;
+      //   const plantY = plant.position.y * viewport.scale + viewport.y;
+      //   const plantSize = plants.plantSize * viewport.scale;
+      //   let startX = viewport.selectArea.startX;
+      //   let startY = viewport.selectArea.startY;
+      //   let endX = viewport.selectArea.startX + viewport.selectArea.endX;
+      //   let endY = viewport.selectArea.startY + viewport.selectArea.endY;
+      //   if (startX > endX) {
+      //     [startX, endX] = [endX, startX];
+      //   }
+      //   if (startY > endY) {
+      //     [startY, endY] = [endY, startY];
+      //   }
+      //   if (
+      //     plantX > startX - plantSize / 2 &&
+      //     plantX < endX + plantSize / 2 &&
+      //     plantY > startY - plantSize / 2 &&
+      //     plantY < endY + plantSize / 2
+      //   ) {
+      //     plants.select(plant.id);
+      //   }
+      // });
     }
   }
   // Middle mouse button pressed
@@ -143,24 +142,25 @@ document.addEventListener("contextmenu", (e) => e.preventDefault());
 <template>
   <div
     id="select-area"
+    class="select-area"
     :style="{
       display: selecting ? 'block' : 'none',
       left:
-        viewport.selectArea.width < 0
-          ? viewport.selectArea.x + viewport.selectArea.width + 'px'
-          : viewport.selectArea.x + 'px',
+        viewport.selectArea.endX < viewport.selectArea.startX
+          ? viewport.selectArea.endX + 'px'
+          : viewport.selectArea.startX + 'px',
       top:
-        viewport.selectArea.height < 0
-          ? viewport.selectArea.y + viewport.selectArea.height + 'px'
-          : viewport.selectArea.y + 'px',
+        viewport.selectArea.endY < viewport.selectArea.startY
+          ? viewport.selectArea.endY + 'px'
+          : viewport.selectArea.startY + 'px',
       width:
-        viewport.selectArea.width < 0
-          ? -viewport.selectArea.width + 'px'
-          : viewport.selectArea.width + 'px',
+        viewport.selectArea.endX < viewport.selectArea.startX
+          ? viewport.selectArea.startX - viewport.selectArea.endX + 'px'
+          : viewport.selectArea.endX - viewport.selectArea.startX + 'px',
       height:
-        viewport.selectArea.height < 0
-          ? -viewport.selectArea.height + 'px'
-          : viewport.selectArea.height + 'px',
+        viewport.selectArea.endY < viewport.selectArea.startY
+          ? viewport.selectArea.startY - viewport.selectArea.endY + 'px'
+          : viewport.selectArea.endY - viewport.selectArea.startY + 'px',
     }"
   ></div>
 </template>
