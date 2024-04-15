@@ -40,4 +40,3 @@ const plants = plantsStore();
   z-index: 1;
 }
 </style>
-@/stores
