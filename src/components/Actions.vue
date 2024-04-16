@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { plantsStore, toolbarStore, viewportStore } from "@/stores";
-import type { PlantedPlant } from "@/types";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
@@ -48,10 +47,7 @@ watch(viewport.mouse, (mouse) => {
     }
     // Move plant with the mouse
     if (plants.selected && movingPlants && !selecting.value) {
-      plants.selected.forEach((plant) => {
-        plant.position.x += mouse.moveX / viewport.scale;
-        plant.position.y += mouse.moveY / viewport.scale;
-      });
+      plants.movePlants(mouse.moveX, mouse.moveY, viewport.scale);
     }
     // Select area
     if (
@@ -71,29 +67,15 @@ watch(viewport.mouse, (mouse) => {
       }
       // Select plants in the area
       plants.unselectAll();
-      plants.planted.forEach((plant: PlantedPlant) => {
-        const plantX = plant.position.x * viewport.scale + viewport.x;
-        const plantY = plant.position.y * viewport.scale + viewport.y;
-        const plantSize = plants.plantSize * viewport.scale;
-        let startX = viewport.selectArea.startX;
-        let startY = viewport.selectArea.startY;
-        let endX = viewport.selectArea.endX;
-        let endY = viewport.selectArea.endY;
-        if (startX > endX) {
-          [startX, endX] = [endX, startX];
-        }
-        if (startY > endY) {
-          [startY, endY] = [endY, startY];
-        }
-        if (
-          plantX > startX - plantSize / 2 &&
-          plantX < endX + plantSize / 2 &&
-          plantY > startY - plantSize / 2 &&
-          plantY < endY + plantSize / 2
-        ) {
-          plants.select(plant.id);
-        }
-      });
+      plants.selectArea(
+        viewport.selectArea.startX,
+        viewport.selectArea.startY,
+        viewport.selectArea.endX,
+        viewport.selectArea.endY,
+        viewport.x,
+        viewport.y,
+        viewport.scale
+      );
     }
   }
   // Middle mouse button pressed

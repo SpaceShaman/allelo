@@ -54,6 +54,36 @@ export const plantsStore = defineStore('plants', () => {
         }
     }
 
+    const selectArea = (
+        startX: number,
+        startY: number,
+        endX: number,
+        endY: number,
+        viewportX: number,
+        viewportY: number,
+        viewportScale: number
+    ) => {
+        planted.value.forEach((plant: PlantedPlant) => {
+            const plantX = plant.position.x * viewportScale + viewportX;
+            const plantY = plant.position.y * viewportScale + viewportY;
+            const size = plantSize.value * viewportScale;
+            if (startX > endX) {
+                [startX, endX] = [endX, startX];
+            }
+            if (startY > endY) {
+                [startY, endY] = [endY, startY];
+            }
+            if (
+                plantX > startX - size / 2 &&
+                plantX < endX + size / 2 &&
+                plantY > startY - size / 2 &&
+                plantY < endY + size / 2
+            ) {
+                select(plant.id);
+            }
+        });
+    }
+
     const unselect = (id: number) => {
         const plant = planted.value.find(plant => plant.id === id)
         if (plant) {
@@ -82,15 +112,24 @@ export const plantsStore = defineStore('plants', () => {
         planted.value = planted.value.filter(plant => plant.id !== id)
     }
 
+    const movePlants = (dx: number, dy: number, viewportScale: number) => {
+        selected.value.forEach((plant: PlantedPlant) => {
+            plant.position.x += dx / viewportScale;
+            plant.position.y += dy / viewportScale;
+        });
+    }
+
     return {
         plantSize,
         planted,
         selected,
         select,
+        selectArea,
         unselect,
         unselectAll,
         getPlantById,
         addPlant,
         removePlant,
+        movePlants,
     }
 })
