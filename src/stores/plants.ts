@@ -4,44 +4,7 @@ import { computed, ref } from 'vue';
 
 export const plantsStore = defineStore('plants', () => {
     const plantSize = ref(50)
-    const planted = ref<PlantedPlant[]>([
-        {
-            id: 0,
-            name: "carrot",
-            position: { x: 400, y: 100 },
-            selected: true,
-        },
-        {
-            id: 1,
-            name: "onion",
-            position: { x: 400, y: 200 },
-            selected: true,
-        },
-        {
-            id: 2,
-            name: "tomato",
-            position: { x: 400, y: 400 },
-            selected: false,
-        },
-        {
-            id: 3,
-            name: "cucumber",
-            position: { x: 400, y: 600 },
-            selected: false,
-        },
-        {
-            id: 4,
-            name: "cucumber",
-            position: { x: 400, y: 800 },
-            selected: false,
-        },
-        {
-            id: 5,
-            name: "strawberry",
-            position: { x: 600, y: 100 },
-            selected: false,
-        },
-    ])
+    const planted = ref<PlantedPlant[]>([])
 
     const selected = computed(() => {
         return planted.value.filter(plant => plant.selected)
