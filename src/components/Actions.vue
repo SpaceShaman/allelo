@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { plantsStore, toolbarStore, viewportStore } from "@/stores";
+import { inputStore, plantsStore, toolbarStore, viewportStore } from "@/stores";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
+const input = inputStore();
 const plants = plantsStore();
 const toolbar = toolbarStore();
 
@@ -14,7 +15,7 @@ document.addEventListener("mouseup", (e) => {
 });
 
 // Mouse actions
-watch(viewport.mouse, (mouse) => {
+watch(input.mouse, (mouse) => {
   if (!mouse.target) return;
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
@@ -41,11 +42,12 @@ watch(viewport.mouse, (mouse) => {
       !movingPlants &&
       !selecting.value
     ) {
+      // Select multiple plants with ctrl key pressed or select only one plant without ctrl key pressed
       if (!mouse.ctrl) plants.unselectAll();
       plants.select(Number(mouse.target.id));
       movingPlants = true;
     }
-    // Move plant with the mouse
+    // Move plants with the mouse
     if (plants.selected && movingPlants && !selecting.value) {
       plants.movePlants(mouse.moveX, mouse.moveY, viewport.scale);
     }
@@ -101,8 +103,8 @@ const handleWheel = (event: WheelEvent) => {
   event.preventDefault();
 
   // Calculate the point on the screen that should remain fixed during scaling
-  const x = viewport.mouse.x;
-  const y = viewport.mouse.y;
+  const x = input.mouse.x;
+  const y = input.mouse.y;
 
   // Calculate the new scale
   let newScale = viewport.scale + event.deltaY * -0.001;
