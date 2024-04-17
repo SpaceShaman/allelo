@@ -1,3 +1,4 @@
+export * from './growingBeds';
 export * from './input';
 export * from './plants';
 export * from './toolbar';

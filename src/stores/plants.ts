@@ -62,7 +62,7 @@ export const plantsStore = defineStore('plants', () => {
         return planted.value.find(plant => plant.id === id)
     }
 
-    const addPlant = (plant: string, x: number, y: number) => {
+    const add = (plant: string, x: number, y: number) => {
         planted.value.push({
             id: Date.now(),
             name: plant,
@@ -71,7 +71,7 @@ export const plantsStore = defineStore('plants', () => {
         })
     }
 
-    const removePlant = (id: number) => {
+    const remove = (id: number) => {
         planted.value = planted.value.filter(plant => plant.id !== id)
     }
 
@@ -91,8 +91,8 @@ export const plantsStore = defineStore('plants', () => {
         unselect,
         unselectAll,
         getPlantById,
-        addPlant,
-        removePlant,
+        addPlant: add,
+        removePlant: remove,
         movePlants,
     }
 })
