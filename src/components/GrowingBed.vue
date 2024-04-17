@@ -4,17 +4,13 @@ import { computed, ref } from "vue";
 
 const viewport = viewportStore();
 
-interface Polygon {
-  x: number;
-  y: number;
-}
-
 const cornerSize = 5;
 
-const polygons = ref<Polygon[]>([
+const polygons = ref<{ x: number; y: number }[]>([
   { x: 0, y: 0 },
   { x: 200, y: 0 },
   { x: 200, y: 200 },
+  { x: 100, y: 200 },
   { x: 0, y: 400 },
 ]);
 
@@ -24,20 +20,38 @@ const width = computed(() => {
 const height = computed(() => {
   return Math.max(...polygons.value.map((p) => p.y)) + cornerSize * 2;
 });
+const left = computed(() => {
+  return Math.min(...polygons.value.map((p) => p.x));
+});
+const top = computed(() => {
+  return Math.min(...polygons.value.map((p) => p.y));
+});
 </script>
 
 <template>
   <svg
     class="growing-bed"
     :style="{
-      transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.scale})`,
+      transform: `translate(
+        ${(left - cornerSize) * viewport.scale + viewport.x}px, ${
+        (top - cornerSize) * viewport.scale + viewport.y
+      }px)`,
     }"
-    :width="width"
-    :height="height"
+    :width="width * viewport.scale"
+    :height="height * viewport.scale"
     :viewBox="`-${cornerSize} -${cornerSize} ${width} ${height}`"
   >
     <polygon
-      :points="polygons.map((p) => `${p.x},${p.y}`).join(' ')"
+      :points="
+        polygons
+          .map(
+            (p) => `
+        ${p.x},
+        ${p.y}
+      `
+          )
+          .join(' ')
+      "
       fill="green"
       fill-opacity="0.3"
       stroke="black"
