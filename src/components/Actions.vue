@@ -25,12 +25,14 @@ document.addEventListener("mouseup", (e) => {
 
 // Mouse actions
 watch(input.mouse, (mouse) => {
-  if (!mouse.target) return;
+  const target = mouse.target;
+  if (!target) return;
+  console.log(target.getAttribute("class"));
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // Grid pressed
     if (
-      mouse.target.id === "grid" &&
+      target.id === "grid" &&
       !movingPlants &&
       !movingGrowingBed &&
       !selecting.value
@@ -52,28 +54,28 @@ watch(input.mouse, (mouse) => {
     }
     // Select single plant
     else if (
-      mouse.target.className === "plant" &&
+      target.className === "plant" &&
       !movingPlants &&
       !movingGrowingBed &&
       !selecting.value
     ) {
       // Select multiple plants with ctrl key pressed or select only one plant without ctrl key pressed
       if (!mouse.ctrl) plants.unselectAll();
-      plants.select(Number(mouse.target.id));
+      plants.select(Number(target.id));
       movingPlants = true;
     }
     // Select growing bed corner
     else if (
-      mouse.target.getAttribute("class") === "bed-corner" &&
+      target.getAttribute("class") === "bed-corner" &&
       !movingPlants &&
       !movingGrowingBed &&
       !selecting.value
     ) {
       if (!mouse.ctrl) growingBeds.unselectAllCorners();
-      const parent = mouse.target.parentElement;
+      const parent = target.parentElement;
       if (!parent) return;
       const bedId = Number(parent.id.replace("bed-", ""));
-      const cornerId = Number(mouse.target.id.replace("corner-", ""));
+      const cornerId = Number(target.id.replace("corner-", ""));
       growingBeds.selectCorner(bedId, cornerId);
       movingGrowingBed = true;
     }
@@ -89,7 +91,9 @@ watch(input.mouse, (mouse) => {
     if (
       toolbar.selected === "select" &&
       !movingPlants &&
-      ["grid", "plant", "select-area"].includes(mouse.target.className)
+      ["grid", "plant", "select-area", "growing-bed", "bed-croner"].includes(
+        target.getAttribute("class") as string
+      )
     ) {
       if (!selecting.value) {
         viewport.selectArea.startX = mouse.x;
@@ -117,14 +121,14 @@ watch(input.mouse, (mouse) => {
   // Middle mouse button pressed
   else if (mouse.pressed && mouse.button === 1) {
     // Remove a plant
-    if (mouse.target.className === "plant") {
-      plants.removePlant(Number(mouse.target.id));
+    if (target.className === "plant") {
+      plants.removePlant(Number(target.id));
     }
   }
   // Right mouse button pressed
   else if (mouse.pressed && mouse.button === 2) {
     // Grid pressed
-    if (mouse.target.id === "grid") {
+    if (target.id === "grid") {
       // Move viewport with the mouse
       viewport.x += mouse.moveX;
       viewport.y += mouse.moveY;

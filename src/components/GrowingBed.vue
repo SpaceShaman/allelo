@@ -60,6 +60,7 @@ const top = computed(() => {
       fill-opacity="0.3"
       stroke="rgb(var(--v-theme-primary))"
       stroke-width="2"
+      class="growing-bed"
     />
     <circle
       v-for="corner in bed.corners"
