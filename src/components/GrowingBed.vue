@@ -19,10 +19,18 @@ const viewport = viewportStore();
 
 const cornerSize = 5;
 const width = computed(() => {
-  return Math.max(...bed.value.polygons.map((p) => p.x)) + cornerSize * 2;
+  return (
+    Math.max(...bed.value.polygons.map((p) => p.x)) -
+    Math.min(...bed.value.polygons.map((p) => p.x)) +
+    cornerSize * 2
+  );
 });
 const height = computed(() => {
-  return Math.max(...bed.value.polygons.map((p) => p.y)) + cornerSize * 2;
+  return (
+    Math.max(...bed.value.polygons.map((p) => p.y)) -
+    Math.min(...bed.value.polygons.map((p) => p.y)) +
+    cornerSize * 2
+  );
 });
 const left = computed(() => {
   return Math.min(...bed.value.polygons.map((p) => p.x));
@@ -46,17 +54,17 @@ const top = computed(() => {
     :viewBox="`-${cornerSize} -${cornerSize} ${width} ${height}`"
   >
     <polygon
-      :points="bed.polygons.map((p) => `${p.x},${p.y}`).join(' ')"
+      :points="bed.polygons.map((p) => `${p.x - left},${p.y - top}`).join(' ')"
       fill="rgb(var(--v-theme-primary))"
       fill-opacity="0.3"
       stroke="rgb(var(--v-theme-primary))"
       stroke-width="2"
     />
     <circle
-      v-for="polygon in bed.polygons"
-      :key="`polygon-${polygon.x}-${polygon.y}`"
-      :cx="polygon.x"
-      :cy="polygon.y"
+      v-for="p in bed.polygons"
+      :key="`polygon-${p.x}-${p.y}`"
+      :cx="p.x - left"
+      :cy="p.y - top"
       :r="cornerSize"
       fill="red"
     />
