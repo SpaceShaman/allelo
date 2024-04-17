@@ -31,6 +31,37 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         }
     }
 
+    const selectArea = (
+        startX: number,
+        startY: number,
+        endX: number,
+        endY: number,
+        viewportX: number,
+        viewportY: number,
+        viewportScale: number
+    ) => {
+        beds.value.forEach(bed => {
+            bed.corners.forEach(corner => {
+                const cornerX = corner.x * viewportScale + viewportX;
+                const cornerY = corner.y * viewportScale + viewportY;
+                if (startX > endX) {
+                    [startX, endX] = [endX, startX];
+                }
+                if (startY > endY) {
+                    [startY, endY] = [endY, startY];
+                }
+                if (
+                    cornerX > startX &&
+                    cornerX < endX &&
+                    cornerY > startY &&
+                    cornerY < endY
+                ) {
+                    corner.selected = true;
+                }
+            });
+        });
+    }
+
     const unselectAllCorners = () => {
         beds.value.forEach(bed => {
             bed.corners.forEach(corner => {
@@ -50,6 +81,7 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         beds,
         add,
         selectCorner,
+        selectArea,
         unselectAllCorners,
         moveCorners
     }

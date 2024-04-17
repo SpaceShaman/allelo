@@ -27,7 +27,6 @@ document.addEventListener("mouseup", (e) => {
 watch(input.mouse, (mouse) => {
   const target = mouse.target;
   if (!target) return;
-  console.log(target.getAttribute("class"));
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // Grid pressed
@@ -91,6 +90,7 @@ watch(input.mouse, (mouse) => {
     if (
       toolbar.selected === "select" &&
       !movingPlants &&
+      !movingGrowingBed &&
       ["grid", "plant", "select-area", "growing-bed", "bed-croner"].includes(
         target.getAttribute("class") as string
       )
@@ -108,6 +108,17 @@ watch(input.mouse, (mouse) => {
       // Select plants in the area
       plants.unselectAll();
       plants.selectArea(
+        viewport.selectArea.startX,
+        viewport.selectArea.startY,
+        viewport.selectArea.endX,
+        viewport.selectArea.endY,
+        viewport.x,
+        viewport.y,
+        viewport.scale
+      );
+      // Select growing bed corners in the area
+      growingBeds.unselectAllCorners();
+      growingBeds.selectArea(
         viewport.selectArea.startX,
         viewport.selectArea.startY,
         viewport.selectArea.endX,
