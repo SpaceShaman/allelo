@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { plantsStore, viewportStore } from "@/stores";
+import GrowingBed from "./components/GrowingBed.vue";
 
 const viewport = viewportStore();
 const plants = plantsStore();
@@ -13,6 +14,7 @@ const plants = plantsStore();
       <Toolbar />
       <Selected />
       <Actions />
+      <GrowingBed />
     </v-main>
   </v-app>
 </template>

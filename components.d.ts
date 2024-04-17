@@ -10,6 +10,7 @@ declare module 'vue' {
     Actions: typeof import('./src/components/Actions.vue')['default']
     ColorModeButton: typeof import('./src/components/ColorModeButton.vue')['default']
     Grid: typeof import('./src/components/Grid.vue')['default']
+    GrowingBed: typeof import('./src/components/GrowingBed.vue')['default']
     PlantIcon: typeof import('./src/components/PlantIcon.vue')['default']
     Plants: typeof import('./src/components/Plants.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
