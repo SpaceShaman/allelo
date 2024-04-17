@@ -3,7 +3,6 @@ import { growingBedsStore } from "@/stores";
 
 const growingBeds = growingBedsStore();
 
-growingBeds.add(0, 0, 100, 100);
 growingBeds.add(100, 200, 800, 1000);
 </script>
 

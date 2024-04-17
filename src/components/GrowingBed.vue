@@ -17,31 +17,32 @@ const bed = defineModel<GrowingBed>({
 
 const viewport = viewportStore();
 
-const cornerSize = 5;
+const cornerSize = 8;
 const width = computed(() => {
   return (
-    Math.max(...bed.value.polygons.map((p) => p.x)) -
-    Math.min(...bed.value.polygons.map((p) => p.x)) +
+    Math.max(...bed.value.corners.map((p) => p.x)) -
+    Math.min(...bed.value.corners.map((p) => p.x)) +
     cornerSize * 2
   );
 });
 const height = computed(() => {
   return (
-    Math.max(...bed.value.polygons.map((p) => p.y)) -
-    Math.min(...bed.value.polygons.map((p) => p.y)) +
+    Math.max(...bed.value.corners.map((p) => p.y)) -
+    Math.min(...bed.value.corners.map((p) => p.y)) +
     cornerSize * 2
   );
 });
 const left = computed(() => {
-  return Math.min(...bed.value.polygons.map((p) => p.x));
+  return Math.min(...bed.value.corners.map((p) => p.x));
 });
 const top = computed(() => {
-  return Math.min(...bed.value.polygons.map((p) => p.y));
+  return Math.min(...bed.value.corners.map((p) => p.y));
 });
 </script>
 
 <template>
   <svg
+    :id="`bed-${bed.id}`"
     class="growing-bed"
     :style="{
       transform: `translate(
@@ -54,19 +55,21 @@ const top = computed(() => {
     :viewBox="`-${cornerSize} -${cornerSize} ${width} ${height}`"
   >
     <polygon
-      :points="bed.polygons.map((p) => `${p.x - left},${p.y - top}`).join(' ')"
+      :points="bed.corners.map((p) => `${p.x - left},${p.y - top}`).join(' ')"
       fill="rgb(var(--v-theme-primary))"
       fill-opacity="0.3"
       stroke="rgb(var(--v-theme-primary))"
       stroke-width="2"
     />
     <circle
-      v-for="p in bed.polygons"
-      :key="`polygon-${p.x}-${p.y}`"
-      :cx="p.x - left"
-      :cy="p.y - top"
+      v-for="corner in bed.corners"
+      :key="`corner-${corner.id}`"
+      :id="`corner-${corner.id}`"
+      :cx="corner.x - left"
+      :cy="corner.y - top"
       :r="cornerSize"
       fill="red"
+      class="bed-corner"
     />
   </svg>
 </template>

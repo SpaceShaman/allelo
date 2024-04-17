@@ -1,16 +1,25 @@
 <script setup lang="ts">
-import { inputStore, plantsStore, toolbarStore, viewportStore } from "@/stores";
+import {
+  growingBedsStore,
+  inputStore,
+  plantsStore,
+  toolbarStore,
+  viewportStore,
+} from "@/stores";
 import { ref, watch } from "vue";
 
 const viewport = viewportStore();
 const input = inputStore();
 const plants = plantsStore();
+const growingBeds = growingBedsStore();
 const toolbar = toolbarStore();
 
 var movingPlants = false;
+var movingGrowingBed = false;
 var selecting = ref(false);
 document.addEventListener("mouseup", (e) => {
   movingPlants = false;
+  movingGrowingBed = false;
   selecting.value = false;
 });
 
@@ -20,7 +29,12 @@ watch(input.mouse, (mouse) => {
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // Grid pressed
-    if (mouse.target.id === "grid" && !movingPlants && !selecting.value) {
+    if (
+      mouse.target.id === "grid" &&
+      !movingPlants &&
+      !movingGrowingBed &&
+      !selecting.value
+    ) {
       plants.unselectAll();
       // Move viewport with the mouse
       if (toolbar.selected === "move") {
@@ -40,6 +54,7 @@ watch(input.mouse, (mouse) => {
     else if (
       mouse.target.className === "plant" &&
       !movingPlants &&
+      !movingGrowingBed &&
       !selecting.value
     ) {
       // Select multiple plants with ctrl key pressed or select only one plant without ctrl key pressed
@@ -47,9 +62,28 @@ watch(input.mouse, (mouse) => {
       plants.select(Number(mouse.target.id));
       movingPlants = true;
     }
+    // Select growing bed corner
+    else if (
+      mouse.target.getAttribute("class") === "bed-corner" &&
+      !movingPlants &&
+      !movingGrowingBed &&
+      !selecting.value
+    ) {
+      if (!mouse.ctrl) growingBeds.unselectAllCorners();
+      const parent = mouse.target.parentElement;
+      if (!parent) return;
+      const bedId = Number(parent.id.replace("bed-", ""));
+      const cornerId = Number(mouse.target.id.replace("corner-", ""));
+      growingBeds.selectCorner(bedId, cornerId);
+      movingGrowingBed = true;
+    }
     // Move plants with the mouse
     if (plants.selected && movingPlants && !selecting.value) {
       plants.movePlants(mouse.moveX, mouse.moveY, viewport.scale);
+    }
+    // Move growing bed corner with the mouse
+    if (movingGrowingBed) {
+      growingBeds.moveCorners(mouse.moveX, mouse.moveY, viewport.scale);
     }
     // Select area
     if (

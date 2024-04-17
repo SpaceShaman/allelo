@@ -1,4 +1,4 @@
 export interface GrowingBed {
     id: number;
-    polygons: { x: number, y: number }[];
+    corners: { id:number, x: number, y: number, selected: boolean }[];
 }
