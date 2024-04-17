@@ -68,7 +68,7 @@ const top = computed(() => {
       :cx="corner.x - left"
       :cy="corner.y - top"
       :r="cornerSize"
-      fill="red"
+      :fill="corner.selected ? 'red' : 'rgb(var(--v-theme-primary))'"
       class="bed-corner"
     />
   </svg>
