@@ -14,12 +14,10 @@ const plants = plantsStore();
 const growingBeds = growingBedsStore();
 const toolbar = toolbarStore();
 
-var movingPlants = false;
-var movingGrowingBed = false;
+var moving = false;
 var selecting = ref(false);
 document.addEventListener("mouseup", (e) => {
-  movingPlants = false;
-  movingGrowingBed = false;
+  moving = false;
   selecting.value = false;
 });
 
@@ -33,8 +31,7 @@ watch(input.mouse, (mouse) => {
     if (
       (target.id === "grid" ||
         target.getAttribute("class") === "growing-bed") &&
-      !movingPlants &&
-      !movingGrowingBed &&
+      !moving &&
       !selecting.value
     ) {
       plants.unselectAll();
@@ -53,45 +50,44 @@ watch(input.mouse, (mouse) => {
       }
     }
     // Select single plant
-    else if (
-      target.className === "plant" &&
-      !movingPlants &&
-      !movingGrowingBed &&
-      !selecting.value
-    ) {
+    else if (target.className === "plant" && !moving && !selecting.value) {
       // Select multiple plants with ctrl key pressed or select only one plant without ctrl key pressed
-      if (!mouse.ctrl) plants.unselectAll();
+      if (!mouse.ctrl) {
+        plants.unselectAll();
+        growingBeds.unselectAllCorners();
+      }
       plants.select(Number(target.id));
-      movingPlants = true;
+      moving = true;
     }
     // Select growing bed corner
     else if (
       target.getAttribute("class") === "bed-corner" &&
-      !movingPlants &&
-      !movingGrowingBed &&
+      !moving &&
       !selecting.value
     ) {
-      if (!mouse.ctrl) growingBeds.unselectAllCorners();
+      if (!mouse.ctrl) {
+        plants.unselectAll();
+        growingBeds.unselectAllCorners();
+      }
       const parent = target.parentElement;
       if (!parent) return;
       const bedId = Number(parent.id.replace("bed-", ""));
       const cornerId = Number(target.id.replace("corner-", ""));
       growingBeds.selectCorner(bedId, cornerId);
-      movingGrowingBed = true;
+      moving = true;
     }
     // Move plants with the mouse
-    if (plants.selected && movingPlants && !selecting.value) {
+    if (plants.selected && moving && !selecting.value) {
       plants.movePlants(mouse.moveX, mouse.moveY, viewport.scale);
     }
     // Move growing bed corner with the mouse
-    if (movingGrowingBed) {
+    if (moving) {
       growingBeds.moveCorners(mouse.moveX, mouse.moveY, viewport.scale);
     }
     // Select area
     if (
       toolbar.selected === "select" &&
-      !movingPlants &&
-      !movingGrowingBed &&
+      !moving &&
       ["grid", "plant", "select-area", "growing-bed", "bed-croner"].includes(
         target.getAttribute("class") as string
       )
