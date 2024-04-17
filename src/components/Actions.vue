@@ -29,9 +29,10 @@ watch(input.mouse, (mouse) => {
   if (!target) return;
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
-    // Grid pressed
+    // Grid or growing bed pressed
     if (
-      target.id === "grid" &&
+      (target.id === "grid" ||
+        target.getAttribute("class") === "growing-bed") &&
       !movingPlants &&
       !movingGrowingBed &&
       !selecting.value
