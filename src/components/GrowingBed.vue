@@ -52,9 +52,9 @@ const top = computed(() => {
           )
           .join(' ')
       "
-      fill="green"
+      fill="rgb(var(--v-theme-primary))"
       fill-opacity="0.3"
-      stroke="black"
+      stroke="rgb(var(--v-theme-primary))"
       stroke-width="2"
     />
     <circle
