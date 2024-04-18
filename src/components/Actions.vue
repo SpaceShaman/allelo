@@ -25,7 +25,6 @@ document.addEventListener("mouseup", (e) => {
 watch(input.mouse, (mouse) => {
   const target = mouse.target;
   if (!target) return;
-  console.log(target.getAttribute("class"));
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // Grid or growing bed pressed
@@ -73,7 +72,7 @@ watch(input.mouse, (mouse) => {
       growingBeds.selectCorner(bedId, cornerId);
       moving = true;
     }
-    // Select whole growing bed
+    // Select whole growing bed and plants inside
     else if (
       target.getAttribute("class") === "growing-bed-polygon" &&
       !moving &&
@@ -87,6 +86,7 @@ watch(input.mouse, (mouse) => {
       if (!parent) return;
       const bedId = Number(parent.id.replace("bed-", ""));
       growingBeds.selectBed(bedId);
+      plants.selectInGrowingBed(bedId);
       moving = true;
     }
     // Move plants with the mouse

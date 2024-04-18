@@ -47,6 +47,16 @@ export const plantsStore = defineStore('plants', () => {
         });
     }
 
+    const selectInGrowingBed = (bedId: number) => {
+        planted.value.forEach(plant => {
+            const elementsAtPoint = document.elementsFromPoint(plant.position.x, plant.position.y);
+            const bed = elementsAtPoint.find(element => element.id === `bed-${bedId}`);
+            if (bed) {
+                select(plant.id);
+            }
+        })
+    }
+
     const unselect = (id: number) => {
         const plant = planted.value.find(plant => plant.id === id)
         if (plant) {
@@ -88,6 +98,7 @@ export const plantsStore = defineStore('plants', () => {
         selected,
         select,
         selectArea,
+        selectInGrowingBed,
         unselect,
         unselectAll,
         getPlantById,
