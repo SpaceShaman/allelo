@@ -27,6 +27,11 @@ watch(input.mouse, (mouse) => {
   if (!target) return;
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
+    // If don't press ctrl key, unselect all plants
+    if (!mouse.ctrl && !moving && !selecting.value) {
+      plants.unselectAll();
+      growingBeds.unselectAllCorners();
+    }
     // Grid or growing bed pressed
     if (target.id === "grid" && !moving && !selecting.value) {
       plants.unselectAll();
@@ -42,11 +47,6 @@ watch(input.mouse, (mouse) => {
     }
     // Select single plant
     else if (target.className === "plant" && !moving && !selecting.value) {
-      // Select multiple plants with ctrl key pressed or select only one plant without ctrl key pressed
-      if (!mouse.ctrl) {
-        plants.unselectAll();
-        growingBeds.unselectAllCorners();
-      }
       plants.select(Number(target.id));
       moving = true;
     }
@@ -56,10 +56,6 @@ watch(input.mouse, (mouse) => {
       !moving &&
       !selecting.value
     ) {
-      if (!mouse.ctrl) {
-        plants.unselectAll();
-        growingBeds.unselectAllCorners();
-      }
       const parent = target.parentElement;
       if (!parent) return;
       const bedId = Number(parent.id.replace("bed-", ""));
@@ -73,10 +69,6 @@ watch(input.mouse, (mouse) => {
       !moving &&
       !selecting.value
     ) {
-      if (!mouse.ctrl) {
-        plants.unselectAll();
-        growingBeds.unselectAllCorners();
-      }
       const parent = target.parentElement;
       if (!parent) return;
       const bedId = Number(parent.id.replace("bed-", ""));
