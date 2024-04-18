@@ -52,7 +52,7 @@ export const plantsStore = defineStore('plants', () => {
             const elementsAtPoint = document.elementsFromPoint(plant.position.x * viewportScale + viewportX, plant.position.y * viewportScale + viewportY);
             const bedPolygon = elementsAtPoint.find(element => element.getAttribute('class') === 'growing-bed-polygon');
             const bed = bedPolygon?.parentElement;
-            if (bed) {
+            if (bed?.getAttribute('id') === `bed-${bedId}`) {
                 select(plant.id);
             }
         })
