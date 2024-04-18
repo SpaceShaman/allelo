@@ -28,7 +28,7 @@ watch(input.mouse, (mouse) => {
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // If don't press ctrl key, unselect all plants
-    if (!mouse.ctrl && !moving && !selecting.value) {
+    if (!mouse.ctrl && !moving) {
       plants.unselectAll();
       growingBeds.unselectAllCorners();
     }
