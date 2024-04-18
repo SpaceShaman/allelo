@@ -101,9 +101,14 @@ watch(input.mouse, (mouse) => {
     if (
       toolbar.selected === "select" &&
       !moving &&
-      ["grid", "plant", "select-area", "growing-bed", "bed-croner"].includes(
-        target.getAttribute("class") as string
-      )
+      [
+        "grid",
+        "plant",
+        "select-area",
+        "growing-bed",
+        "growing-bed-croner",
+        "growing-bed-polygon",
+      ].includes(target.getAttribute("class") as string)
     ) {
       if (!selecting.value) {
         viewport.selectArea.startX = mouse.x;

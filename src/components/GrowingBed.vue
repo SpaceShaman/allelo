@@ -38,6 +38,9 @@ const left = computed(() => {
 const top = computed(() => {
   return Math.min(...bed.value.corners.map((p) => p.y));
 });
+const isSelected = computed(() => {
+  return bed.value.corners.some((corner) => corner.selected);
+});
 </script>
 
 <template>
@@ -63,6 +66,7 @@ const top = computed(() => {
       stroke-width="2"
     />
     <circle
+      v-if="isSelected"
       class="growing-bed-corner"
       v-for="corner in bed.corners"
       :key="`corner-${corner.id}`"
