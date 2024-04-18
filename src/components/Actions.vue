@@ -31,13 +31,8 @@ watch(input.mouse, (mouse) => {
     if (target.id === "grid" && !moving && !selecting.value) {
       plants.unselectAll();
       growingBeds.unselectAllCorners();
-      // Move viewport with the mouse
-      if (toolbar.selected === "move") {
-        viewport.x += mouse.moveX;
-        viewport.y += mouse.moveY;
-      }
       // Add a plant
-      else if (toolbar.selected.includes("plant-")) {
+      if (toolbar.selected.includes("plant-")) {
         plants.addPlant(
           toolbar.selected.replace("plant-", ""),
           (mouse.x - viewport.x) / viewport.scale,
@@ -153,12 +148,9 @@ watch(input.mouse, (mouse) => {
   }
   // Right mouse button pressed
   else if (mouse.pressed && mouse.button === 2) {
-    // Grid pressed
-    if (target.id === "grid") {
-      // Move viewport with the mouse
-      viewport.x += mouse.moveX;
-      viewport.y += mouse.moveY;
-    }
+    // Move viewport with the mouse
+    viewport.x += mouse.moveX;
+    viewport.y += mouse.moveY;
   }
 });
 
