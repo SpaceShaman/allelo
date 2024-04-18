@@ -16,9 +16,22 @@ const toolbar = toolbarStore();
 
 var moving = false;
 var selecting = ref(false);
+var drawingGrowingBed = false;
 document.addEventListener("mouseup", (e) => {
   moving = false;
   selecting.value = false;
+  if (drawingGrowingBed) {
+    growingBeds.addBed(
+      viewport.selectArea.startX,
+      viewport.selectArea.startY,
+      viewport.selectArea.endX,
+      viewport.selectArea.endY,
+      viewport.x,
+      viewport.y,
+      viewport.scale
+    );
+  }
+  drawingGrowingBed = false;
 });
 
 // Mouse actions
@@ -87,9 +100,9 @@ watch(input.mouse, (mouse) => {
     if (moving && growingBeds.selectedCorners && !selecting.value) {
       growingBeds.moveCorners(mouse.moveX, mouse.moveY, viewport.scale);
     }
-    // Select area
+    // Select area and draw growing bed
     if (
-      toolbar.selected === "select" &&
+      ["select", "growing-bed"].includes(toolbar.selected) &&
       !moving &&
       [
         "grid",
@@ -106,30 +119,35 @@ watch(input.mouse, (mouse) => {
         viewport.selectArea.endX = mouse.x;
         viewport.selectArea.endY = mouse.y;
         selecting.value = true;
+        if (toolbar.selected === "growing-bed") {
+          drawingGrowingBed = true;
+        }
       } else {
         viewport.selectArea.endX = mouse.x;
         viewport.selectArea.endY = mouse.y;
       }
-      // Select plants in the area
-      plants.selectArea(
-        viewport.selectArea.startX,
-        viewport.selectArea.startY,
-        viewport.selectArea.endX,
-        viewport.selectArea.endY,
-        viewport.x,
-        viewport.y,
-        viewport.scale
-      );
-      // Select growing bed corners in the area
-      growingBeds.selectArea(
-        viewport.selectArea.startX,
-        viewport.selectArea.startY,
-        viewport.selectArea.endX,
-        viewport.selectArea.endY,
-        viewport.x,
-        viewport.y,
-        viewport.scale
-      );
+      if (toolbar.selected === "select") {
+        // Select plants in the area
+        plants.selectArea(
+          viewport.selectArea.startX,
+          viewport.selectArea.startY,
+          viewport.selectArea.endX,
+          viewport.selectArea.endY,
+          viewport.x,
+          viewport.y,
+          viewport.scale
+        );
+        // Select growing bed corners in the area
+        growingBeds.selectArea(
+          viewport.selectArea.startX,
+          viewport.selectArea.startY,
+          viewport.selectArea.endX,
+          viewport.selectArea.endY,
+          viewport.x,
+          viewport.y,
+          viewport.scale
+        );
+      }
     }
   }
   // Middle mouse button pressed

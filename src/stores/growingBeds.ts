@@ -5,7 +5,7 @@ import { computed, ref } from 'vue';
 export const growingBedsStore = defineStore('growingBeds', () => {
     const beds = ref<GrowingBed[]>([]);
 
-    const add = (startX: number, startY: number, endX: number, endY: number) => {
+    const addBed = (startX: number, startY: number, endX: number, endY: number, viewportX: number, viewportY: number, viewportScale: number) => {
         beds.value.push({
             id: Date.now(),
             corners: [
@@ -87,7 +87,7 @@ export const growingBedsStore = defineStore('growingBeds', () => {
 
     return {
         beds,
-        add,
+        addBed,
         selectedCorners,
         selectCorner,
         selectBed,

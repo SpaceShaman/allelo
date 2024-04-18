@@ -2,8 +2,6 @@
 import { growingBedsStore } from "@/stores";
 
 const growingBeds = growingBedsStore();
-
-growingBeds.add(100, 200, 800, 1000);
 </script>
 
 <template>
