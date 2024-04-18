@@ -32,18 +32,21 @@ watch(input.mouse, (mouse) => {
       plants.unselectAll();
       growingBeds.unselectAllCorners();
     }
-    // Grid or growing bed pressed
-    if (target.id === "grid" && !moving && !selecting.value) {
-      plants.unselectAll();
-      growingBeds.unselectAllCorners();
-      // Add a plant
-      if (toolbar.selected.includes("plant-")) {
-        plants.addPlant(
-          toolbar.selected.replace("plant-", ""),
-          (mouse.x - viewport.x) / viewport.scale,
-          (mouse.y - viewport.y) / viewport.scale
-        );
-      }
+    // Add a plant
+    if (
+      toolbar.selected.includes("plant-") &&
+      [
+        "grid",
+        "growing-bed",
+        "growing-bed-croner",
+        "growing-bed-polygon",
+      ].includes(target.getAttribute("class") as string)
+    ) {
+      plants.addPlant(
+        toolbar.selected.replace("plant-", ""),
+        (mouse.x - viewport.x) / viewport.scale,
+        (mouse.y - viewport.y) / viewport.scale
+      );
     }
     // Select single plant
     else if (target.className === "plant" && !moving && !selecting.value) {
@@ -73,7 +76,7 @@ watch(input.mouse, (mouse) => {
       if (!parent) return;
       const bedId = Number(parent.id.replace("bed-", ""));
       growingBeds.selectBed(bedId);
-      plants.selectInGrowingBed(bedId);
+      plants.selectInGrowingBed(bedId, viewport.x, viewport.y, viewport.scale);
       moving = true;
     }
     // Move plants with the mouse
@@ -108,7 +111,6 @@ watch(input.mouse, (mouse) => {
         viewport.selectArea.endY = mouse.y;
       }
       // Select plants in the area
-      plants.unselectAll();
       plants.selectArea(
         viewport.selectArea.startX,
         viewport.selectArea.startY,
@@ -119,7 +121,6 @@ watch(input.mouse, (mouse) => {
         viewport.scale
       );
       // Select growing bed corners in the area
-      growingBeds.unselectAllCorners();
       growingBeds.selectArea(
         viewport.selectArea.startX,
         viewport.selectArea.startY,

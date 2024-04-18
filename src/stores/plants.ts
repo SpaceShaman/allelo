@@ -47,10 +47,11 @@ export const plantsStore = defineStore('plants', () => {
         });
     }
 
-    const selectInGrowingBed = (bedId: number) => {
+    const selectInGrowingBed = (bedId: number, viewportX: number, viewportY: number, viewportScale: number) => {
         planted.value.forEach(plant => {
-            const elementsAtPoint = document.elementsFromPoint(plant.position.x, plant.position.y);
-            const bed = elementsAtPoint.find(element => element.id === `bed-${bedId}`);
+            const elementsAtPoint = document.elementsFromPoint(plant.position.x * viewportScale + viewportX, plant.position.y * viewportScale + viewportY);
+            const bedPolygon = elementsAtPoint.find(element => element.getAttribute('class') === 'growing-bed-polygon');
+            const bed = bedPolygon?.parentElement;
             if (bed) {
                 select(plant.id);
             }
