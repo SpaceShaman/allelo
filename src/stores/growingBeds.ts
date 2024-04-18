@@ -9,10 +9,10 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         beds.value.push({
             id: Date.now(),
             corners: [
-                { id: Date.now(), x: startX, y: startY, selected: false}, 
-                { id: Date.now() + 1, x: endX, y: startY, selected: false },
-                { id: Date.now() + 2, x: endX, y: endY, selected: false },
-                { id: Date.now() + 3, x: startX, y: endY, selected: false }
+                { id: Date.now(), x: (startX - viewportX) / viewportScale, y: (startY - viewportY) / viewportScale, selected: false },
+                { id: Date.now() + 1, x: (endX - viewportX) / viewportScale, y: (startY - viewportY) / viewportScale, selected: false },
+                { id: Date.now() + 2, x: (endX - viewportX) / viewportScale, y: (endY - viewportY) / viewportScale, selected: false },
+                { id: Date.now() + 3, x: (startX - viewportX) / viewportScale, y: (endY - viewportY) / viewportScale, selected: false }
             ]
         });
     }
