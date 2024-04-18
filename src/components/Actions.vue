@@ -25,16 +25,13 @@ document.addEventListener("mouseup", (e) => {
 watch(input.mouse, (mouse) => {
   const target = mouse.target;
   if (!target) return;
+  console.log(target.getAttribute("class"));
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // Grid or growing bed pressed
-    if (
-      (target.id === "grid" ||
-        target.getAttribute("class") === "growing-bed") &&
-      !moving &&
-      !selecting.value
-    ) {
+    if (target.id === "grid" && !moving && !selecting.value) {
       plants.unselectAll();
+      growingBeds.unselectAllCorners();
       // Move viewport with the mouse
       if (toolbar.selected === "move") {
         viewport.x += mouse.moveX;
@@ -61,7 +58,7 @@ watch(input.mouse, (mouse) => {
     }
     // Select growing bed corner
     else if (
-      target.getAttribute("class") === "bed-corner" &&
+      target.getAttribute("class") === "growing-bed-corner" &&
       !moving &&
       !selecting.value
     ) {
@@ -76,12 +73,28 @@ watch(input.mouse, (mouse) => {
       growingBeds.selectCorner(bedId, cornerId);
       moving = true;
     }
+    // Select whole growing bed
+    else if (
+      target.getAttribute("class") === "growing-bed-polygon" &&
+      !moving &&
+      !selecting.value
+    ) {
+      if (!mouse.ctrl) {
+        plants.unselectAll();
+        growingBeds.unselectAllCorners();
+      }
+      const parent = target.parentElement;
+      if (!parent) return;
+      const bedId = Number(parent.id.replace("bed-", ""));
+      growingBeds.selectBed(bedId);
+      moving = true;
+    }
     // Move plants with the mouse
-    if (plants.selected && moving && !selecting.value) {
+    if (moving && plants.selected && !selecting.value) {
       plants.movePlants(mouse.moveX, mouse.moveY, viewport.scale);
     }
     // Move growing bed corner with the mouse
-    if (moving) {
+    if (moving && growingBeds.selectedCorners && !selecting.value) {
       growingBeds.moveCorners(mouse.moveX, mouse.moveY, viewport.scale);
     }
     // Select area

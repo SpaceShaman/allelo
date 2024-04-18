@@ -31,6 +31,14 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         }
     }
 
+    const selectBed = (bedId: number) => {
+        beds.value.forEach(bed => {
+            bed.corners.forEach(corner => {
+                corner.selected = bed.id === bedId;
+            });
+        });
+    }
+
     const selectArea = (
         startX: number,
         startY: number,
@@ -80,7 +88,9 @@ export const growingBedsStore = defineStore('growingBeds', () => {
     return {
         beds,
         add,
+        selectedCorners,
         selectCorner,
+        selectBed,
         selectArea,
         unselectAllCorners,
         moveCorners

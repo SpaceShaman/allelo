@@ -42,8 +42,8 @@ const top = computed(() => {
 
 <template>
   <svg
-    :id="`bed-${bed.id}`"
     class="growing-bed"
+    :id="`bed-${bed.id}`"
     :style="{
       transform: `translate(
         ${(left - cornerSize) * viewport.scale + viewport.x}px, ${
@@ -55,14 +55,15 @@ const top = computed(() => {
     :viewBox="`-${cornerSize} -${cornerSize} ${width} ${height}`"
   >
     <polygon
+      class="growing-bed-polygon"
       :points="bed.corners.map((p) => `${p.x - left},${p.y - top}`).join(' ')"
       fill="rgb(var(--v-theme-primary))"
       fill-opacity="0.3"
       stroke="rgb(var(--v-theme-primary))"
       stroke-width="2"
-      class="growing-bed"
     />
     <circle
+      class="growing-bed-corner"
       v-for="corner in bed.corners"
       :key="`corner-${corner.id}`"
       :id="`corner-${corner.id}`"
@@ -70,7 +71,6 @@ const top = computed(() => {
       :cy="corner.y - top"
       :r="cornerSize"
       :fill="corner.selected ? 'red' : 'rgb(var(--v-theme-primary))'"
-      class="bed-corner"
     />
   </svg>
 </template>
