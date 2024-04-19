@@ -44,5 +44,7 @@ const plants = plantsStore();
   margin: 20px;
   max-height: calc(100vh - 40px);
   z-index: 2;
+  touch-action: none;
+  user-select: none;
 }
 </style>
