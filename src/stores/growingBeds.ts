@@ -34,7 +34,9 @@ export const growingBedsStore = defineStore('growingBeds', () => {
     const selectBed = (bedId: number) => {
         beds.value.forEach(bed => {
             bed.corners.forEach(corner => {
-                corner.selected = bed.id === bedId;
+                if (bed.id === bedId) {
+                    corner.selected = true;
+                }
             });
         });
     }
