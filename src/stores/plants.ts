@@ -58,6 +58,10 @@ export const plantsStore = defineStore('plants', () => {
         })
     }
 
+    const selectAll = () => {
+        planted.value.forEach(plant => plant.selected = true)
+    }
+
     const unselect = (id: number) => {
         const plant = planted.value.find(plant => plant.id === id)
         if (plant) {
@@ -104,6 +108,7 @@ export const plantsStore = defineStore('plants', () => {
         select,
         selectArea,
         selectInGrowingBed,
+        selectAll,
         unselect,
         unselectAll,
         getPlantById,

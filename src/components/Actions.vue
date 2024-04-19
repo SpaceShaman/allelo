@@ -175,10 +175,16 @@ watch(input.mouse, (mouse) => {
 
 // Keyboard actions
 document.addEventListener("keydown", (e) => {
+  e.preventDefault();
   // Delete selected plants and growing bed corners
   if (e.key === "Delete") {
     plants.removeSelected();
     growingBeds.removeSelectedCorners();
+  }
+  // Select all plants and growing bed corners
+  else if (e.key === "a" && e.ctrlKey) {
+    plants.selectAll();
+    growingBeds.selectAll();
   }
 });
 
