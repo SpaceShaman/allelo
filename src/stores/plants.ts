@@ -86,6 +86,10 @@ export const plantsStore = defineStore('plants', () => {
         planted.value = planted.value.filter(plant => plant.id !== id)
     }
 
+    const removeSelected = () => {
+        planted.value = planted.value.filter(plant => !plant.selected)
+    }
+
     const movePlants = (dx: number, dy: number, viewportScale: number) => {
         selected.value.forEach((plant: PlantedPlant) => {
             plant.position.x += dx / viewportScale;
@@ -104,7 +108,8 @@ export const plantsStore = defineStore('plants', () => {
         unselectAll,
         getPlantById,
         addPlant: add,
-        removePlant: remove,
+        remove,
+        removeSelected,
         movePlants,
     }
 })

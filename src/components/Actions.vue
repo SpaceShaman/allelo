@@ -154,7 +154,15 @@ watch(input.mouse, (mouse) => {
   else if (mouse.pressed && mouse.button === 1) {
     // Remove a plant
     if (target.className === "plant") {
-      plants.removePlant(Number(target.id));
+      plants.remove(Number(target.id));
+    }
+    // Remove a growing bed corner
+    else if (target.getAttribute("class") === "growing-bed-corner") {
+      const parent = target.parentElement;
+      if (!parent) return;
+      const bedId = Number(parent.id.replace("bed-", ""));
+      const cornerId = Number(target.id.replace("corner-", ""));
+      growingBeds.removeCorner(bedId, cornerId);
     }
   }
   // Right mouse button pressed
@@ -162,6 +170,15 @@ watch(input.mouse, (mouse) => {
     // Move viewport with the mouse
     viewport.x += mouse.moveX;
     viewport.y += mouse.moveY;
+  }
+});
+
+// Keyboard actions
+document.addEventListener("keydown", (e) => {
+  // Delete selected plants and growing bed corners
+  if (e.key === "Delete") {
+    plants.removeSelected();
+    growingBeds.removeSelectedCorners();
   }
 });
 

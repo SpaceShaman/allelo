@@ -80,6 +80,32 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         });
     }
 
+    const removeBed = (bedId: number) => {
+        beds.value = beds.value.filter(bed => bed.id !== bedId);
+    }
+
+    const removeCorner = (bedId: number, cornerId: number) => {
+        const bed = beds.value.find(bed => bed.id === bedId);
+        if (!bed) {
+            return;
+        }
+        bed.corners = bed.corners.filter(corner => corner.id !== cornerId);
+        // Remove the bed if it has less than 3 corners
+        if (bed.corners.length < 3) {
+            removeBed(bedId);
+        }
+    }
+
+    const removeSelectedCorners = () => {
+        beds.value.forEach(bed => {
+            bed.corners = bed.corners.filter(corner => !corner.selected);
+            // Remove beds with less than 3 corners
+            if (bed.corners.length < 3) {
+                removeBed(bed.id);
+            }
+        });
+    }
+
     const moveCorners = (dx: number, dy: number, viewportScale: number) => {
         selectedCorners.value.forEach(corner => {
             corner.x += dx / viewportScale;
@@ -95,6 +121,8 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         selectBed,
         selectArea,
         unselectAllCorners,
+        removeCorner,
+        removeSelectedCorners,
         moveCorners
     }
 })
