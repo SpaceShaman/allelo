@@ -17,24 +17,31 @@ const toolbar = toolbarStore();
 var moving = false;
 var selecting = ref(false);
 var drawingGrowingBed = false;
-document.addEventListener("mouseup", (e) => {
-  moving = false;
-  selecting.value = false;
-  if (drawingGrowingBed) {
-    growingBeds.addBed(
-      viewport.selectArea.startX,
-      viewport.selectArea.startY,
-      viewport.selectArea.endX,
-      viewport.selectArea.endY,
-      viewport.x,
-      viewport.y,
-      viewport.scale
-    );
-  }
-  drawingGrowingBed = false;
-});
 
-// Mouse actions
+// Watch the mouse up event
+watch(
+  () => input.mouse.up,
+  (up) => {
+    if (up) {
+      moving = false;
+      selecting.value = false;
+      if (drawingGrowingBed) {
+        growingBeds.addBed(
+          viewport.selectArea.startX,
+          viewport.selectArea.startY,
+          viewport.selectArea.endX,
+          viewport.selectArea.endY,
+          viewport.x,
+          viewport.y,
+          viewport.scale
+        );
+      }
+      drawingGrowingBed = false;
+    }
+  }
+);
+
+// Watch the mouse events
 watch(input.mouse, (mouse) => {
   const target = mouse.target;
   if (!target) return;
@@ -173,35 +180,39 @@ watch(input.mouse, (mouse) => {
   }
 });
 
-// Add corner to the growing bed when double click on the polygon
-document.addEventListener("dblclick", (e) => {
-  const target = e.target as HTMLElement;
-  if (target.getAttribute("class") === "growing-bed-polygon") {
-    const parent = target.parentElement;
-    if (!parent) return;
-    const bedId = Number(parent.id.replace("bed-", ""));
-    growingBeds.addCorner(
-      bedId,
-      (e.clientX - viewport.x) / viewport.scale,
-      (e.clientY - viewport.y) / viewport.scale
-    );
+// Watch mouse double click events
+watch(
+  () => input.mouse.doubleClick,
+  () => {
+    const target = input.mouse.target as HTMLElement;
+    // Add corner to the growing bed when double click on the polygon
+    if (target.getAttribute("class") === "growing-bed-polygon") {
+      const parent = target.parentElement;
+      if (!parent) return;
+      const bedId = Number(parent.id.replace("bed-", ""));
+      growingBeds.addCorner(
+        bedId,
+        (input.mouse.x - viewport.x) / viewport.scale,
+        (input.mouse.y - viewport.y) / viewport.scale
+      );
+    }
   }
-});
+);
 
-// Keyboard actions
-document.addEventListener("keydown", (e) => {
+// Watch the keyboard events
+watch(input.keyboard, (keyboard) => {
   // Delete selected plants and growing bed corners
-  if (e.key === "Delete") {
+  if (keyboard.key === "Delete") {
     plants.removeSelected();
     growingBeds.removeSelectedCorners();
   }
   // Select all plants and growing bed corners
-  else if (e.key === "a" && e.ctrlKey) {
+  else if (keyboard.key === "a" && keyboard.ctrl) {
     plants.selectAll();
     growingBeds.selectAll();
   }
   // Unselect all plants and growing bed corners
-  else if (e.key === "Escape") {
+  else if (keyboard.key === "Escape") {
     plants.unselectAll();
     growingBeds.unselectAllCorners();
   }
@@ -229,9 +240,6 @@ const handleWheel = (event: WheelEvent) => {
   viewport.y = newY;
 };
 window.addEventListener("wheel", handleWheel, { passive: false });
-
-// disable right-click context menu
-document.addEventListener("contextmenu", (e) => e.preventDefault());
 </script>
 <template>
   <div
