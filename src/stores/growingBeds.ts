@@ -22,21 +22,21 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         if (!bed) {
             return;
         }
-        // Find the closest corner to the new corner
-        let closestCornerIndex = 0;
-        let closestCornerDistance = Infinity;
-        bed.corners.forEach(corner => {
-            const distance = Math.sqrt((corner.x - x) ** 2 + (corner.y - y) ** 2);
-            if (distance < closestCornerDistance) {
-                closestCornerDistance = distance;
-                closestCornerIndex = bed.corners.indexOf(corner);
-            }
+        // Find two closest corners
+        const distances = bed.corners.map(corner => {
+            return Math.sqrt((corner.x - x) ** 2 + (corner.y - y) ** 2);
         });
-        // Insert the new corner after the closest corner
-        bed.corners.splice(closestCornerIndex + 1, 0, { id: Date.now(), x, y, selected: false });
-
-
-        console.log(beds.value);
+        const minDistance = Math.min(...distances);
+        const closestCornerIndex = distances.indexOf(minDistance);
+        const nextCornerIndex = (closestCornerIndex + 1) % bed.corners.length;
+        // Insert the new corner between the two closest corners
+        const newCorner = {
+            id: Date.now(),
+            x: x,
+            y: y,
+            selected: false
+        };
+        bed.corners.splice(nextCornerIndex, 0, newCorner);
     }
 
     const selectedCorners = computed(() => {
