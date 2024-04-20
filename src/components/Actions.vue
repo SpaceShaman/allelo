@@ -18,6 +18,13 @@ var moving = false;
 var selecting = ref(false);
 var drawingGrowingBed = false;
 
+function countPositionOnGrid(x: number, y: number) {
+  return {
+    x: (x - viewport.x) / viewport.scale,
+    y: (y - viewport.y) / viewport.scale,
+  };
+}
+
 // Watch the mouse up event
 watch(
   () => input.mouse.up,
@@ -27,13 +34,14 @@ watch(
       selecting.value = false;
       if (drawingGrowingBed) {
         growingBeds.addBed(
-          viewport.selectArea.startX,
-          viewport.selectArea.startY,
-          viewport.selectArea.endX,
-          viewport.selectArea.endY,
-          viewport.x,
-          viewport.y,
-          viewport.scale
+          countPositionOnGrid(
+            viewport.selectArea.startX,
+            viewport.selectArea.startY
+          ),
+          countPositionOnGrid(
+            viewport.selectArea.endX,
+            viewport.selectArea.endY
+          )
         );
       }
       drawingGrowingBed = false;

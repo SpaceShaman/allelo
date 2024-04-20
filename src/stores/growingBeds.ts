@@ -5,14 +5,14 @@ import { computed, ref } from 'vue';
 export const growingBedsStore = defineStore('growingBeds', () => {
     const beds = ref<GrowingBed[]>([]);
 
-    const addBed = (startX: number, startY: number, endX: number, endY: number, viewportX: number, viewportY: number, viewportScale: number) => {
+    const addBed = (start: { x: number, y: number }, end: { x: number, y: number }) => {
         beds.value.push({
             id: Date.now(),
             corners: [
-                { id: Date.now(), x: (startX - viewportX) / viewportScale, y: (startY - viewportY) / viewportScale, selected: false },
-                { id: Date.now() + 1, x: (endX - viewportX) / viewportScale, y: (startY - viewportY) / viewportScale, selected: false },
-                { id: Date.now() + 2, x: (endX - viewportX) / viewportScale, y: (endY - viewportY) / viewportScale, selected: false },
-                { id: Date.now() + 3, x: (startX - viewportX) / viewportScale, y: (endY - viewportY) / viewportScale, selected: false }
+                { id: Date.now(), x: start.x, y: start.y, selected: false },
+                { id: Date.now() + 1, x: end.x, y: start.y, selected: false },
+                { id: Date.now() + 2, x: end.x, y: end.y, selected: false },
+                { id: Date.now() + 3, x: start.x, y: end.y, selected: false }
             ]
         });
     }
