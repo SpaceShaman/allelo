@@ -180,8 +180,6 @@ document.addEventListener("dblclick", (e) => {
     const parent = target.parentElement;
     if (!parent) return;
     const bedId = Number(parent.id.replace("bed-", ""));
-    console.log(bedId);
-    console.log(e.clientX, e.clientY);
     growingBeds.addCorner(
       bedId,
       (e.clientX - viewport.x) / viewport.scale,
