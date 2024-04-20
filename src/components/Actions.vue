@@ -173,6 +173,23 @@ watch(input.mouse, (mouse) => {
   }
 });
 
+// Add corner to the growing bed when double click on the polygon
+document.addEventListener("dblclick", (e) => {
+  const target = e.target as HTMLElement;
+  if (target.getAttribute("class") === "growing-bed-polygon") {
+    const parent = target.parentElement;
+    if (!parent) return;
+    const bedId = Number(parent.id.replace("bed-", ""));
+    console.log(bedId);
+    console.log(e.clientX, e.clientY);
+    growingBeds.addCorner(
+      bedId,
+      (e.clientX - viewport.x) / viewport.scale,
+      (e.clientY - viewport.y) / viewport.scale
+    );
+  }
+});
+
 // Keyboard actions
 document.addEventListener("keydown", (e) => {
   // Delete selected plants and growing bed corners

@@ -17,6 +17,28 @@ export const growingBedsStore = defineStore('growingBeds', () => {
         });
     }
 
+    const addCorner = (bedId: number, x: number, y: number) => {
+        const bed = beds.value.find(bed => bed.id === bedId);
+        if (!bed) {
+            return;
+        }
+        // Find the closest corner to the new corner
+        let closestCornerIndex = 0;
+        let closestCornerDistance = Infinity;
+        bed.corners.forEach(corner => {
+            const distance = Math.sqrt((corner.x - x) ** 2 + (corner.y - y) ** 2);
+            if (distance < closestCornerDistance) {
+                closestCornerDistance = distance;
+                closestCornerIndex = bed.corners.indexOf(corner);
+            }
+        });
+        // Insert the new corner after the closest corner
+        bed.corners.splice(closestCornerIndex + 1, 0, { id: Date.now(), x, y, selected: false });
+
+
+        console.log(beds.value);
+    }
+
     const selectedCorners = computed(() => {
         return beds.value.flatMap(bed => bed.corners.filter(corner => corner.selected));
     })
@@ -124,6 +146,7 @@ export const growingBedsStore = defineStore('growingBeds', () => {
     return {
         beds,
         addBed,
+        addCorner,
         selectedCorners,
         selectCorner,
         selectBed,
