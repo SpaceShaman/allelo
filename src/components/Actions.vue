@@ -98,7 +98,8 @@ watch(input.mouse, (mouse) => {
     else if (
       target.getAttribute("class") === "growing-bed-polygon" &&
       !moving &&
-      !selecting.value
+      !selecting.value &&
+      toolbar.selected !== "select"
     ) {
       const parent = target.parentElement;
       if (!parent) return;
