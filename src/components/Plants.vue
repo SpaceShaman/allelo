@@ -6,7 +6,7 @@ const viewport = viewportStore();
 
 const plants = plantsStore();
 
-plants.addPlant("tomato", 400, 600);
+plants.add("tomato", { x: 400, y: 600 });
 </script>
 
 <template>

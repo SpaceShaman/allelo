@@ -68,12 +68,12 @@ watch(input.mouse, (mouse) => {
         "growing-bed",
         "growing-bed-croner",
         "growing-bed-polygon",
-      ].includes(target.getAttribute("class") as string)
+      ].includes(target.getAttribute("class") as string) &&
+      !moving
     ) {
-      plants.addPlant(
+      plants.add(
         toolbar.selected.replace("plant-", ""),
-        (mouse.x - viewport.x) / viewport.scale,
-        (mouse.y - viewport.y) / viewport.scale
+        countPositionOnGrid(mouse.x, mouse.y)
       );
     }
     // Select single plant
