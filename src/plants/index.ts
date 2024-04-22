@@ -1,36 +1,30 @@
 import { Plant } from '@/types';
 
-const plants: Plant[] = [
-    {
-        name: 'broccoli',
+const plants: { [name: string]: Plant } = {
+    'broccoli': {
         positive: ['carrot', 'pepper'],
         negative: ['radish', 'tomato']
     },
-    {
-        name: 'carrot',
+    'carrot': {
         positive: ['broccoli', 'parsley'],
         negative: ['tomato']
     },
-    {
-        name: 'parsley',
+    'parsley': {
         positive: ['carrot'],
         negative: ['broccoli']
     },
-    {
-        name: 'pepper',
+    'pepper': {
         positive: ['broccoli'],
         negative: ['parsley']
     },
-    {
-        name: 'radish',
+    'radish': {
         positive: ['parsley', 'tomato'],
         negative: ['broccoli']
     },
-    {
-        name: 'tomato',
+    'tomato': {
         positive: ['radish'],
         negative: ['carrot']
     }
-];
+};
 
 export default plants;

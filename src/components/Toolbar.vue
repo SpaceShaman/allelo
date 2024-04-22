@@ -19,11 +19,11 @@ watch(
     <v-btn icon="mdi-select" value="select"><v-icon>mdi-select</v-icon></v-btn>
     <v-btn value="growing-bed"><PlantIcon name="growing-bed" /></v-btn>
     <v-btn
-      v-for="plant in plants"
-      :key="plant.name"
-      :value="`plant-${plant.name}`"
+      v-for="[name, plant] in Object.entries(plants)"
+      :key="name"
+      :value="`plant-${name}`"
     >
-      <PlantIcon :name="plant.name" />
+      <PlantIcon :name="name" />
     </v-btn>
     <!-- <v-menu>
       <template v-slot:activator="{ props }">
