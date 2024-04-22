@@ -8,7 +8,7 @@ const plants = plantsStore();
 
 const grupedPlants = computed(() => {
   const grouped: Record<string, PlantedPlant[]> = {};
-  for (const [id, plant] of Object.entries(plants.selected)) {
+  for (const [id, plant] of Object.entries(plants.planted)) {
     if (!grouped[plant.name]) {
       grouped[plant.name] = [];
     }
@@ -16,8 +16,9 @@ const grupedPlants = computed(() => {
   }
   return grouped;
 });
+
 const open = ref<string[]>([]);
-const tab = ref<string>("positive");
+const tab = ref<string>();
 </script>
 
 <template>
@@ -39,7 +40,7 @@ const tab = ref<string>("positive");
       variant="text"
     /> -->
     <v-list v-model:opened="open" density="compact" slim>
-      <v-list-subheader>Selected</v-list-subheader>
+      <v-list-subheader>Planted</v-list-subheader>
       <v-list-group
         v-for="[group, plants] of Object.entries(grupedPlants)"
         :key="group"
@@ -65,6 +66,9 @@ const tab = ref<string>("positive");
           v-for="[id, plant] of plants.entries()"
           :key="id"
           :value="`${group}-${id}`"
+          @click.stop="
+            plant.selected = open.includes(`${group}-${id}`) ? true : false
+          "
         >
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" slim>
@@ -72,10 +76,18 @@ const tab = ref<string>("positive");
                 <PlantIcon :name="group" />
               </template>
               <template v-slot:title>
-                {{ plant.name }}
-                {{
-                  `${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`
-                }}
+                <p
+                  :style="{
+                    color: plant.selected
+                      ? 'rgb(var(--v-theme-primary))'
+                      : 'inherit',
+                  }"
+                >
+                  {{ plant.name }}
+                  {{
+                    `${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`
+                  }}
+                </p>
               </template>
             </v-list-item>
           </template>

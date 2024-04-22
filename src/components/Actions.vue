@@ -55,7 +55,6 @@ watch(input.mouse, (mouse) => {
   if (!target) return;
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
-    console.log(target.getAttribute("class"));
     // If don't press ctrl key, unselect all plants
     if (
       !mouse.ctrl &&
