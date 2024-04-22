@@ -76,6 +76,7 @@ export const plantsStore = defineStore('plants', () => {
             name: plant,
             position: position,
             selected: false,
+            hovered: false,
         }
     }
 

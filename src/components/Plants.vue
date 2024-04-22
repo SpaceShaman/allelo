@@ -24,7 +24,9 @@ plants.add("tomato", { x: 400, y: 600 });
         (plant.position.y - plants.plantSize / 2) * viewport.scale + viewport.y
       }px)`,
       width: `${plants.plantSize * viewport.scale}px`,
-      outline: plant.selected
+      outline: plant.hovered
+        ? '3px solid green'
+        : plant.selected
         ? '2px solid rgb(var(--v-theme-primary))'
         : 'none',
     }"

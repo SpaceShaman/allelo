@@ -66,9 +66,11 @@ const tab = ref<string>();
           v-for="[id, plant] of plants.entries()"
           :key="id"
           :value="`${group}-${id}`"
-          @click.stop="
+          @click="
             plant.selected = open.includes(`${group}-${id}`) ? true : false
           "
+          @mouseover="plant.hovered = true"
+          @mouseleave="plant.hovered = false"
         >
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" slim>

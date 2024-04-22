@@ -5,4 +5,5 @@ export interface PlantedPlant {
         y: number;
     };
     selected: boolean;
+    hovered: boolean;
 }
