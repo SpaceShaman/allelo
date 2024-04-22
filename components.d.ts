@@ -9,14 +9,11 @@ declare module 'vue' {
   export interface GlobalComponents {
     Actions: typeof import('./src/components/Actions.vue')['default']
     ColorModeButton: typeof import('./src/components/ColorModeButton.vue')['default']
-    copy: typeof import('./src/components/GrowingBed copy.vue')['default']
     Grid: typeof import('./src/components/Grid.vue')['default']
     GrowingBed: typeof import('./src/components/GrowingBed.vue')['default']
     GrowingBeds: typeof import('./src/components/GrowingBeds.vue')['default']
     PlantIcon: typeof import('./src/components/PlantIcon.vue')['default']
     Plants: typeof import('./src/components/Plants.vue')['default']
-    RouterLink: typeof import('vue-router')['RouterLink']
-    RouterView: typeof import('vue-router')['RouterView']
     Selected: typeof import('./src/components/Selected.vue')['default']
     Toolbar: typeof import('./src/components/Toolbar.vue')['default']
   }
