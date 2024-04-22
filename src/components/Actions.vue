@@ -56,7 +56,17 @@ watch(input.mouse, (mouse) => {
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // If don't press ctrl key, unselect all plants
-    if (!mouse.ctrl && !moving) {
+    if (
+      !mouse.ctrl &&
+      !moving &&
+      [
+        "grid",
+        "plant",
+        "growing-bed",
+        "growing-bed-croner",
+        "growing-bed-polygon",
+      ].includes(target.getAttribute("class") as string)
+    ) {
       plants.unselectAll();
       growingBeds.unselectAllCorners();
     }

@@ -2,52 +2,34 @@ import { Plant } from '@/types';
 
 const plants: Plant[] = [
     {
-        name: 'onion',
-        type: 'vegetable',
-        friends: [
-            {
-                name: 'carrot',
-                reason: 'grows well together',
-                range: 4,
-                growthSpeed: 1
-            },
-            {
-                name: 'cucumber',
-                reason: 'grows well together',
-                range: 3,
-                growthSpeed: 2
-            }
-        ],
-        enemies: [
-            {
-                name: 'tomato',
-                reason: 'grows poorly together',
-                range: 5,
-                growthSpeed: -0.5
-            },
-            {
-                name: 'strawberry',
-                reason: 'grows poorly together',
-                range: 3,
-                growthSpeed: -1
-            }
-        ]
+        name: 'broccoli',
+        positive: ['carrot', 'pepper'],
+        negative: ['radish', 'tomato']
     },
     {
         name: 'carrot',
-        type: 'vegetable',
+        positive: ['broccoli', 'parsley'],
+        negative: ['tomato']
     },
     {
-        name: 'cucumber',
-        type: 'vegetable',
+        name: 'parsley',
+        positive: ['carrot'],
+        negative: ['broccoli']
+    },
+    {
+        name: 'pepper',
+        positive: ['broccoli'],
+        negative: ['parsley']
+    },
+    {
+        name: 'radish',
+        positive: ['parsley', 'tomato'],
+        negative: ['broccoli']
     },
     {
         name: 'tomato',
-        type: 'fruit',
-    },
-    {
-        name: 'strawberry',
-        type: 'fruit',
+        positive: ['radish'],
+        negative: ['carrot']
     }
 ];
 
