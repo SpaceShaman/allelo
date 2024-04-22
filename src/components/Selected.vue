@@ -73,7 +73,7 @@ const tab = ref<string>();
           @mouseleave="plant.hovered = false"
         >
           <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" slim>
+            <v-list-item v-bind="props">
               <template v-slot:prepend>
                 <PlantIcon :name="group" />
               </template>
