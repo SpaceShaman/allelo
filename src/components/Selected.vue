@@ -1,8 +1,21 @@
 <script setup lang="ts">
 import { plantsStore, viewportStore } from "@/stores";
+import { PlantedPlant } from "@/types";
+import { computed } from "vue";
 
 const viewport = viewportStore();
 const plants = plantsStore();
+
+const grupedPlants = computed(() => {
+  const grouped: Record<string, PlantedPlant[]> = {};
+  for (const [id, plant] of Object.entries(plants.planted)) {
+    if (!grouped[plant.name]) {
+      grouped[plant.name] = [];
+    }
+    grouped[plant.name].push(plant);
+  }
+  return grouped;
+});
 </script>
 
 <template>
@@ -24,15 +37,26 @@ const plants = plantsStore();
       variant="text"
     /> -->
     <v-card
-      v-for="[id, plant] in Object.entries(plants.planted)"
-      :key="`${plant.name}-${id}`"
-      :title="plant.name"
-      :subtitle="`${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`"
+      v-for="[group, plants] of Object.entries(grupedPlants)"
+      :key="group"
+      :title="`${group}s`"
       variant="text"
     >
       <template v-slot:prepend>
-        <PlantIcon :name="plant.name" />
+        <PlantIcon :name="group" />
       </template>
+      <v-card
+        v-for="[id, plant] of plants.entries()"
+        :key="id"
+        :title="group"
+        :subtitle="`${plant.position.x.toFixed()} x
+      ${plant.position.y.toFixed()}`"
+        variant="text"
+      >
+        <template v-slot:prepend>
+          <PlantIcon :name="group" />
+        </template>
+      </v-card>
     </v-card>
   </v-card>
 </template>

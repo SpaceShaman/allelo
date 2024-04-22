@@ -4,7 +4,7 @@ import { computed, ref } from 'vue';
 
 export const plantsStore = defineStore('plants', () => {
     const plantSize = ref(50)
-    const planted = ref<{ [id: number]: PlantedPlant }>({})
+    const planted = ref<Record<number, PlantedPlant>>({})
 
     const selected = computed(() => {
         return Object.values(planted.value).filter(plant => plant.selected)

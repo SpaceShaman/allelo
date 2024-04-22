@@ -239,7 +239,17 @@ watch(input.keyboard, (keyboard) => {
 
 // Zoom in and out with the mouse wheel
 const handleWheel = (event: WheelEvent) => {
-  event.preventDefault();
+  const target = input.mouse.target as HTMLElement;
+  if (
+    ![
+      "grid",
+      "plant",
+      "growing-bed",
+      "growing-bed-croner",
+      "growing-bed-polygon",
+    ].includes(target?.getAttribute("class") as string)
+  )
+    return;
 
   // Calculate the point on the screen that should remain fixed during scaling
   const x = input.mouse.x;
