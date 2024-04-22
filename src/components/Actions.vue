@@ -55,6 +55,7 @@ watch(input.mouse, (mouse) => {
   if (!target) return;
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
+    console.log(target.getAttribute("class"));
     // If don't press ctrl key, unselect all plants
     if (
       !mouse.ctrl &&
@@ -63,7 +64,7 @@ watch(input.mouse, (mouse) => {
         "grid",
         "plant",
         "growing-bed",
-        "growing-bed-croner",
+        "growing-bed-corner",
         "growing-bed-polygon",
       ].includes(target.getAttribute("class") as string)
     ) {
@@ -76,7 +77,7 @@ watch(input.mouse, (mouse) => {
       [
         "grid",
         "growing-bed",
-        "growing-bed-croner",
+        "growing-bed-corner",
         "growing-bed-polygon",
       ].includes(target.getAttribute("class") as string) &&
       !moving
@@ -135,7 +136,7 @@ watch(input.mouse, (mouse) => {
         "plant",
         "select-area",
         "growing-bed",
-        "growing-bed-croner",
+        "growing-bed-corner",
         "growing-bed-polygon",
       ].includes(target.getAttribute("class") as string)
     ) {
@@ -245,7 +246,7 @@ const handleWheel = (event: WheelEvent) => {
       "grid",
       "plant",
       "growing-bed",
-      "growing-bed-croner",
+      "growing-bed-corner",
       "growing-bed-polygon",
     ].includes(target?.getAttribute("class") as string)
   )
