@@ -24,8 +24,8 @@ const plants = plantsStore();
       variant="text"
     /> -->
     <v-card
-      v-for="plant in plants.selected"
-      :key="`${plant.name}-${plant.id}`"
+      v-for="[id, plant] in Object.entries(plants.planted)"
+      :key="`${plant.name}-${id}`"
       :title="plant.name"
       :subtitle="`${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`"
       variant="text"

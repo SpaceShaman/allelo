@@ -4,17 +4,14 @@ import { computed, ref } from 'vue';
 
 export const plantsStore = defineStore('plants', () => {
     const plantSize = ref(50)
-    const planted = ref<PlantedPlant[]>([])
+    const planted = ref<{ [id: number]: PlantedPlant }>({})
 
     const selected = computed(() => {
-        return planted.value.filter(plant => plant.selected)
+        return Object.values(planted.value).filter(plant => plant.selected)
     })
 
     const select = (id: number) => {
-        const plant = planted.value.find(plant => plant.id === id)
-        if (plant) {
-            plant.selected = true
-        }
+        planted.value[id].selected = true
     }
 
     const selectArea = (
@@ -26,7 +23,7 @@ export const plantsStore = defineStore('plants', () => {
         viewportY: number,
         viewportScale: number
     ) => {
-        planted.value.forEach((plant: PlantedPlant) => {
+        for (const [id, plant] of Object.entries(planted.value)) {
             const plantX = plant.position.x * viewportScale + viewportX;
             const plantY = plant.position.y * viewportScale + viewportY;
             const size = plantSize.value * viewportScale;
@@ -42,56 +39,56 @@ export const plantsStore = defineStore('plants', () => {
                 plantY > startY - size / 2 &&
                 plantY < endY + size / 2
             ) {
-                select(plant.id);
+                select(Number(id));
             }
-        });
+        }
     }
 
     const selectInGrowingBed = (bedId: number, viewportX: number, viewportY: number, viewportScale: number) => {
-        planted.value.forEach(plant => {
+        for (const [id, plant] of Object.entries(planted.value)) {
             const elementsAtPoint = document.elementsFromPoint(plant.position.x * viewportScale + viewportX, plant.position.y * viewportScale + viewportY);
             const bedPolygon = elementsAtPoint.find(element => element.getAttribute('class') === 'growing-bed-polygon');
             const bed = bedPolygon?.parentElement;
             if (bed?.getAttribute('id') === `bed-${bedId}`) {
-                select(plant.id);
+                select(Number(id));
             }
-        })
-    }
-
-    const selectAll = () => {
-        planted.value.forEach(plant => plant.selected = true)
-    }
-
-    const unselect = (id: number) => {
-        const plant = planted.value.find(plant => plant.id === id)
-        if (plant) {
-            plant.selected = false
         }
     }
 
-    const unselectAll = () => {
-        planted.value.forEach(plant => plant.selected = false)
+    const selectAll = () => {
+        for (const id in planted.value) {
+            select(Number(id));
+        }
     }
 
-    const getPlantById = (id: number) => {
-        return planted.value.find(plant => plant.id === id)
+    const unselect = (id: number) => {
+        planted.value[id].selected = false
+    }
+
+    const unselectAll = () => {
+        for (const id in planted.value) {
+            unselect(Number(id));
+        }
     }
 
     const add = (plant: string, position: { x: number, y: number }) => {
-        planted.value.push({
-            id: Date.now(),
+        planted.value[Date.now()] = {
             name: plant,
             position: position,
             selected: false,
-        })
+        }
     }
 
     const remove = (id: number) => {
-        planted.value = planted.value.filter(plant => plant.id !== id)
+        delete planted.value[id]
     }
 
     const removeSelected = () => {
-        planted.value = planted.value.filter(plant => !plant.selected)
+        for (const [id, plant] of Object.entries(planted.value)) {
+            if (plant.selected) {
+                remove(Number(id));
+            }
+        }
     }
 
     const movePlants = (dx: number, dy: number, viewportScale: number) => {
@@ -111,7 +108,6 @@ export const plantsStore = defineStore('plants', () => {
         selectAll,
         unselect,
         unselectAll,
-        getPlantById,
         add,
         remove,
         removeSelected,

@@ -11,9 +11,9 @@ plants.add("tomato", { x: 400, y: 600 });
 
 <template>
   <img
-    v-for="plant in plants.planted"
-    :key="plant.id"
-    :id="`${plant.id}`"
+    v-for="[id, plant] in Object.entries(plants.planted)"
+    :key="id"
+    :id="`${id}`"
     :src="getPlantSvg(plant.name)"
     class="plant"
     draggable="false"
