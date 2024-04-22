@@ -17,6 +17,7 @@ const grupedPlants = computed(() => {
   return grouped;
 });
 const open = ref<string[]>([]);
+const tab = ref<string>("positive");
 </script>
 
 <template>
@@ -57,18 +58,41 @@ const open = ref<string[]>([]);
             >
           </v-list-item>
         </template>
-        <v-card
+        <v-list-group
           v-for="[id, plant] of plants.entries()"
           :key="id"
-          :title="group"
-          :subtitle="`${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`"
-          variant="text"
-          class="ml-4"
+          :value="`${group}-${id}`"
         >
-          <template v-slot:prepend>
-            <PlantIcon :name="group" size="1.2" />
+          <template v-slot:activator="{ props }">
+            <v-list-item v-bind="props">
+              <template v-slot:prepend>
+                <PlantIcon :name="group" />
+              </template>
+              <template v-slot:title>
+                {{ plant.name }}
+                {{
+                  `${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`
+                }}
+              </template>
+            </v-list-item>
           </template>
-        </v-card>
+          <v-list-item>
+            <template v-slot:subtitle>
+              <v-tabs v-model="tab">
+                <v-tab value="positive">Positive</v-tab>
+                <v-tab value="negative">Negative</v-tab>
+              </v-tabs>
+            </template>
+
+            <v-card-text>
+              <v-window v-model="tab">
+                <v-window-item value="positive"> Positive </v-window-item>
+
+                <v-window-item value="negative"> negative </v-window-item>
+              </v-window>
+            </v-card-text>
+          </v-list-item>
+        </v-list-group>
       </v-list-group>
     </v-list>
   </v-card>
