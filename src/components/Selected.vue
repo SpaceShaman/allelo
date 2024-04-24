@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { plantsStore, viewportStore } from "@/stores";
+import { inputStore, plantsStore, viewportStore } from "@/stores";
 import { PlantedPlant } from "@/types";
 import { computed, ref } from "vue";
 
 const viewport = viewportStore();
 const plants = plantsStore();
+const input = inputStore();
 
 const grupedPlants = computed(() => {
   const grouped: Record<string, PlantedPlant[]> = {};
@@ -17,7 +18,6 @@ const grupedPlants = computed(() => {
   return grouped;
 });
 
-const open = ref<string[]>([]);
 const tab = ref<string>();
 </script>
 
@@ -39,41 +39,65 @@ const tab = ref<string>();
       :text="`${viewport.mouse.pressed} ${viewport.mouse.button} ${viewport.mouse.target?.id} \n${viewport.mouse.moveX} x ${viewport.mouse.moveY}`"
       variant="text"
     /> -->
-    <v-list v-model:opened="open" density="compact" slim>
+    <v-list density="compact" slim>
+      <!-- <v-list v-model:opened="open" density="compact" slim> -->
       <v-list-subheader>Planted</v-list-subheader>
       <v-list-group
-        v-for="[group, plants] of Object.entries(grupedPlants)"
+        v-for="[group, plantsOnList] of Object.entries(grupedPlants)"
         :key="group"
         :value="group"
         :title="`${group}s`"
         variant="text"
       >
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props">
+          <v-list-item>
             <template v-slot:prepend>
               <PlantIcon :name="group" />
             </template>
             <template v-slot:title>
-              <h3>
+              <h3
+                :style="{
+                  color: plantsOnList.some((plant) => plant.selected)
+                    ? 'rgb(var(--v-theme-primary))'
+                    : 'inherit',
+                }"
+                @mouseover="
+                  plantsOnList.forEach((plant) => {
+                    if (plant.name === group) plant.hovered = true;
+                  })
+                "
+                @mouseleave="
+                  plantsOnList.forEach((plant) => {
+                    plant.hovered = false;
+                  })
+                "
+                @click="
+                  if (!input.keyboard.ctrl) plants.unselectAll();
+                  plantsOnList.forEach((plant) => {
+                    if (plant.name === group) {
+                      plant.selected = true;
+                      plant.hovered = false;
+                    }
+                  });
+                "
+              >
                 {{ group.charAt(0).toUpperCase() + group.slice(1) }}s ({{
-                  plants.length
+                  plantsOnList.length
                 }})
               </h3>
+            </template>
+            <template v-slot:append>
+              <v-icon @click="props.onClick"> </v-icon>
             </template>
           </v-list-item>
         </template>
         <v-list-group
-          v-for="[id, plant] of plants.entries()"
+          v-for="[id, plant] of plantsOnList.entries()"
           :key="id"
           :value="`${group}-${id}`"
-          @click="
-            plant.selected = open.includes(`${group}-${id}`) ? true : false
-          "
-          @mouseover="plant.hovered = true"
-          @mouseleave="plant.hovered = false"
         >
           <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props">
+            <v-list-item>
               <template v-slot:prepend>
                 <PlantIcon :name="group" />
               </template>
@@ -84,12 +108,22 @@ const tab = ref<string>();
                       ? 'rgb(var(--v-theme-primary))'
                       : 'inherit',
                   }"
+                  @mouseover="plant.hovered = true"
+                  @mouseleave="plant.hovered = false"
+                  @click="
+                    if (!input.keyboard.ctrl) plants.unselectAll();
+                    plant.selected = true;
+                    plant.hovered = false;
+                  "
                 >
                   {{ plant.name }}
                   {{
                     `${plant.position.x.toFixed()} x ${plant.position.y.toFixed()}`
                   }}
                 </p>
+              </template>
+              <template v-slot:append>
+                <v-icon @click="props.onClick"> </v-icon>
               </template>
             </v-list-item>
           </template>
