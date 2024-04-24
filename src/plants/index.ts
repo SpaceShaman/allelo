@@ -9,6 +9,10 @@ const plants: { [name: string]: Plant } = {
         positive: ['broccoli', 'parsley'],
         negative: ['tomato']
     },
+    'carrot_new': {
+        positive: ['broccoli', 'parsley'],
+        negative: ['tomato']
+    },
     'parsley': {
         positive: ['carrot'],
         negative: ['broccoli']
