@@ -32,6 +32,8 @@ plants.add("tomato", { x: 400, y: 600 });
       filter:
         plant.enemies && plant.enemies.length > 0
           ? 'brightness(100%) contrast(100%) invert(40%) sepia(80%) saturate(500%) hue-rotate(-40deg)'
+          : plant.friends && plant.friends.length > 0
+          ? 'brightness(100%) contrast(100%) invert(30%) sepia(40%) saturate(500%) hue-rotate(40deg)'
           : 'none',
     }"
   />
