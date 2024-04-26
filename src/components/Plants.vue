@@ -29,6 +29,10 @@ plants.add("tomato", { x: 400, y: 600 });
         : plant.selected
         ? '2px solid rgb(var(--v-theme-primary))'
         : 'none',
+      filter:
+        plant.enemies && plant.enemies.length > 0
+          ? 'brightness(100%) contrast(100%) invert(40%) sepia(80%) saturate(500%) hue-rotate(-40deg)'
+          : 'none',
     }"
   />
 </template>
