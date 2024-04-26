@@ -1,4 +1,4 @@
 export interface Plant {
-    positive?: string[];
-    negative?: string[];
+    friends?: string[];
+    enemies?: string[];
 }

@@ -6,4 +6,6 @@ export interface PlantedPlant {
     };
     selected: boolean;
     hovered: boolean;
+    friends?: PlantedPlant[];
+    enemies?: PlantedPlant[];
 }

@@ -14,6 +14,7 @@ declare module 'vue' {
     GrowingBeds: typeof import('./src/components/GrowingBeds.vue')['default']
     PlantIcon: typeof import('./src/components/PlantIcon.vue')['default']
     Plants: typeof import('./src/components/Plants.vue')['default']
+    RightPanel: typeof import('./src/components/RightPanel.vue')['default']
     Selected: typeof import('./src/components/Selected.vue')['default']
     Toolbar: typeof import('./src/components/Toolbar.vue')['default']
   }

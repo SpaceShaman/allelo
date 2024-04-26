@@ -11,7 +11,7 @@ const plants = plantsStore();
       <Plants />
       <Grid />
       <Toolbar />
-      <Selected />
+      <RightPanel />
       <Actions />
       <GrowingBeds />
     </v-main>

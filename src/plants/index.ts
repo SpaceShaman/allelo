@@ -2,32 +2,32 @@ import { Plant } from '@/types';
 
 const plants: { [name: string]: Plant } = {
     'broccoli': {
-        positive: ['carrot', 'pepper'],
-        negative: ['radish', 'tomato']
+        friends: ['carrot', 'pepper'],
+        enemies: ['radish', 'tomato']
     },
     'carrot': {
-        positive: ['broccoli', 'parsley'],
-        negative: ['tomato']
+        friends: ['broccoli', 'parsley'],
+        enemies: ['tomato']
     },
     'carrot_new': {
-        positive: ['broccoli', 'parsley'],
-        negative: ['tomato']
+        friends: ['broccoli', 'parsley'],
+        enemies: ['tomato']
     },
     'parsley': {
-        positive: ['carrot'],
-        negative: ['broccoli']
+        friends: ['carrot'],
+        enemies: ['broccoli']
     },
     'pepper': {
-        positive: ['broccoli'],
-        negative: ['parsley']
+        friends: ['broccoli'],
+        enemies: ['parsley']
     },
     'radish': {
-        positive: ['parsley', 'tomato'],
-        negative: ['broccoli']
+        friends: ['parsley', 'tomato'],
+        enemies: ['broccoli']
     },
     'tomato': {
-        positive: ['radish'],
-        negative: ['carrot']
+        friends: ['radish'],
+        enemies: ['carrot']
     }
 };
 

@@ -1,3 +1,4 @@
+import possiblePlants from '@/plants';
 import { PlantedPlant } from '@/types';
 import { defineStore } from "pinia";
 import { computed, ref } from 'vue';
@@ -78,6 +79,7 @@ export const plantsStore = defineStore('plants', () => {
             selected: false,
             hovered: false,
         }
+        checkAllFriendsAndEnemies();
     }
 
     const remove = (id: number) => {
@@ -90,6 +92,7 @@ export const plantsStore = defineStore('plants', () => {
                 remove(Number(id));
             }
         }
+        checkAllFriendsAndEnemies();
     }
 
     const movePlants = (dx: number, dy: number, viewportScale: number) => {
@@ -97,6 +100,31 @@ export const plantsStore = defineStore('plants', () => {
             plant.position.x += dx / viewportScale;
             plant.position.y += dy / viewportScale;
         });
+        checkAllFriendsAndEnemies();
+    }
+
+    const checkFriendsAndEnemies = (plant: PlantedPlant) => {
+        plant.friends = [];
+        plant.enemies = [];
+        for (const [id, plantedPlant] of Object.entries(planted.value)) {
+
+            const {friends, enemies} = possiblePlants[plantedPlant.name];
+            // check if plantedPlant is in 300px radius of plant
+            if (Math.sqrt(Math.pow(plant.position.x - plantedPlant.position.x, 2) + Math.pow(plant.position.y - plantedPlant.position.y, 2)) < 300) {
+                if (friends?.includes(plant.name)) {
+                    plant.friends?.push(plantedPlant);
+                }
+                if (enemies?.includes(plant.name)) {
+                    plant.enemies?.push(plantedPlant);
+                }
+            }
+        }
+    }
+
+    const checkAllFriendsAndEnemies = () => {
+        for (const [id, plant] of Object.entries(planted.value)) {
+            checkFriendsAndEnemies(plant);
+        }
     }
 
     return {
