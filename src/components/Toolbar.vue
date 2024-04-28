@@ -18,7 +18,7 @@ watch(
 );
 const tab = ref<string>();
 
-function onMenuClick(event: MouseEvent, props: any) {
+function openMenu(event: MouseEvent, props: any) {
   if (event.button === 2) {
     props.onClick(event);
   }
@@ -48,7 +48,7 @@ function onMenuClick(event: MouseEvent, props: any) {
     <v-menu v-for="[name, plant] in Object.entries(plants)" :key="name">
       <template v-slot:activator="{ isActive, props }">
         <v-btn
-          @contextmenu.prevent="onMenuClick($event, props)"
+          @contextmenu.prevent="openMenu($event, props)"
           :value="`plant-${name}`"
         >
           <PlantIcon :name="name" />
@@ -72,11 +72,29 @@ function onMenuClick(event: MouseEvent, props: any) {
         </v-btn>
       </template>
       <v-list>
-        <v-list-item value="carrot">
-          <PlantIcon name="carrot" />
-        </v-list-item>
-        <v-list-item value="broccoli">
-          <PlantIcon name="broccoli" />
+        <v-list-item
+          v-for="[name, plant] in Object.entries(plants)"
+          :key="name"
+          :value="name"
+        >
+          <PlantIcon :name="name" />
+          <v-tooltip activator="parent" location="right">
+            <h2>{{ toTitle(name) }}</h2>
+            <v-row>
+              <v-col>
+                <h3 class="text-green">Friends</h3>
+                <p v-for="friend in plant.friends" :key="friend">
+                  {{ toTitle(friend) }}
+                </p>
+              </v-col>
+              <v-col>
+                <h3 class="text-red">Enemies</h3>
+                <p v-for="enemy in plant.enemies" :key="enemy">
+                  {{ toTitle(enemy) }}
+                </p>
+              </v-col>
+            </v-row>
+          </v-tooltip>
         </v-list-item>
       </v-list>
     </v-menu>
