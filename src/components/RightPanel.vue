@@ -127,122 +127,111 @@ const tab = ref<string>();
               </template>
             </v-list-item>
           </template>
-          <v-list-item>
-            <template v-slot:subtitle>
-              <v-tabs v-model="tab" fixed-tabs>
-                <v-tab
-                  value="friends"
-                  color="green"
-                  @mouseover="
-                    if (plant.friends) {
-                      plant.friends.forEach((friend) => {
-                        friend.hovered = true;
-                      });
-                    }
-                  "
-                  @mouseleave="
-                    if (plant.friends) {
-                      plant.friends.forEach((friend) => {
-                        friend.hovered = false;
-                      });
-                    }
+          <v-tabs v-model="tab" grow>
+            <v-tab
+              value="friends"
+              color="green"
+              @mouseover="
+                if (plant.friends) {
+                  plant.friends.forEach((friend) => {
+                    friend.hovered = true;
+                  });
+                }
+              "
+              @mouseleave="
+                if (plant.friends) {
+                  plant.friends.forEach((friend) => {
+                    friend.hovered = false;
+                  });
+                }
+              "
+            >
+              Friends
+            </v-tab>
+            <v-tab
+              value="enemies"
+              color="red"
+              @mouseover="
+                if (plant.enemies) {
+                  plant.enemies.forEach((enemy) => {
+                    enemy.hovered = true;
+                  });
+                }
+              "
+              @mouseleave="
+                if (plant.enemies) {
+                  plant.enemies.forEach((enemy) => {
+                    enemy.hovered = false;
+                  });
+                }
+              "
+            >
+              Enemies
+            </v-tab>
+          </v-tabs>
+          <v-card-text>
+            <v-window v-model="tab">
+              <v-window-item value="friends">
+                <v-list-item
+                  v-if="plant.friends"
+                  v-for="[id, friend] of plant.friends.entries()"
+                  :key="id"
+                  @mouseover="friend.hovered = true"
+                  @mouseleave="friend.hovered = false"
+                  @click="
+                    if (!input.keyboard.ctrl) plants.unselectAll();
+                    friend.selected = true;
+                    friend.hovered = false;
                   "
                 >
-                  Friends
-                </v-tab>
-                <v-tab
-                  value="enemies"
-                  color="red"
-                  @mouseover="
-                    if (plant.enemies) {
-                      plant.enemies.forEach((enemy) => {
-                        enemy.hovered = true;
-                      });
-                    }
-                  "
-                  @mouseleave="
-                    if (plant.enemies) {
-                      plant.enemies.forEach((enemy) => {
-                        enemy.hovered = false;
-                      });
-                    }
+                  <template v-slot:title>
+                    <p
+                      :style="{
+                        color: friend.selected
+                          ? 'rgb(var(--v-theme-primary))'
+                          : 'inherit',
+                      }"
+                    >
+                      {{ friend.name }}
+                    </p>
+                  </template>
+                  <template v-slot:prepend>
+                    <PlantIcon :name="friend.name" />
+                  </template>
+                </v-list-item>
+              </v-window-item>
+
+              <v-window-item value="enemies">
+                <v-list-item
+                  v-if="plant.enemies"
+                  v-for="[id, enemy] of plant.enemies.entries()"
+                  :key="id"
+                  @mouseover="enemy.hovered = true"
+                  @mouseleave="enemy.hovered = false"
+                  @click="
+                    if (!input.keyboard.ctrl) plants.unselectAll();
+                    enemy.selected = true;
+                    enemy.hovered = false;
                   "
                 >
-                  Enemies
-                </v-tab>
-              </v-tabs>
-            </template>
-
-            <v-card-text>
-              <v-window v-model="tab">
-                <v-window-item value="friends">
-                  <div
-                    v-if="plant.friends"
-                    v-for="[id, friend] of plant.friends.entries()"
-                    :key="id"
-                  >
-                    <v-list-item
-                      @mouseover="friend.hovered = true"
-                      @mouseleave="friend.hovered = false"
-                      @click="
-                        if (!input.keyboard.ctrl) plants.unselectAll();
-                        friend.selected = true;
-                        friend.hovered = false;
-                      "
+                  <template v-slot:title>
+                    <p
+                      :style="{
+                        color: enemy.selected
+                          ? 'rgb(var(--v-theme-primary))'
+                          : 'inherit',
+                      }"
                     >
-                      <template v-slot:title>
-                        <p
-                          :style="{
-                            color: friend.selected
-                              ? 'rgb(var(--v-theme-primary))'
-                              : 'inherit',
-                          }"
-                        >
-                          {{ friend.name }}
-                        </p>
-                      </template>
-                      <template v-slot:prepend>
-                        <PlantIcon :name="friend.name" />
-                      </template>
-                    </v-list-item>
-                  </div>
-                </v-window-item>
-
-                <v-window-item value="enemies">
-                  <p
-                    v-if="plant.enemies"
-                    v-for="[id, enemy] of plant.enemies.entries()"
-                    :key="id"
-                  >
-                    <v-list-item
-                      @mouseover="enemy.hovered = true"
-                      @mouseleave="enemy.hovered = false"
-                      @click="
-                        if (!input.keyboard.ctrl) plants.unselectAll();
-                        enemy.selected = true;
-                        enemy.hovered = false;
-                      "
-                    >
-                      <template v-slot:title>
-                        <p
-                          :style="{
-                            color: enemy.selected
-                              ? 'rgb(var(--v-theme-primary))'
-                              : 'inherit',
-                          }"
-                        >
-                          {{ enemy.name }}
-                        </p>
-                      </template>
-                      <template v-slot:prepend>
-                        <PlantIcon :name="enemy.name" />
-                      </template>
-                    </v-list-item>
-                  </p>
-                </v-window-item>
-              </v-window>
-            </v-card-text>
-          </v-list-item>
+                      {{ enemy.name }}
+                    </p>
+                  </template>
+                  <template v-slot:prepend>
+                    <PlantIcon :name="enemy.name" />
+                  </template>
+                </v-list-item>
+              </v-window-item>
+            </v-window>
+          </v-card-text>
         </v-list-group>
       </v-list-group>
     </v-list>
