@@ -25,6 +25,19 @@ function countPositionOnGrid(x: number, y: number) {
   };
 }
 
+function mouseIsOverGrowingSpace(target: HTMLElement, exclude: string[] = []) {
+  return (
+    [
+      "grid",
+      "plant",
+      "select-area",
+      "growing-bed",
+      "growing-bed-corner",
+      "growing-bed-polygon",
+    ].filter((item) => !exclude.includes(item)) as string[]
+  ).includes(target.getAttribute("class") as string);
+}
+
 // Watch the mouse up event
 watch(
   () => input.mouse.up,
@@ -56,30 +69,15 @@ watch(input.mouse, (mouse) => {
   // Left mouse button pressed
   if (mouse.pressed && mouse.button === 0) {
     // If don't press ctrl key, unselect all plants
-    if (
-      !mouse.ctrl &&
-      !moving &&
-      [
-        "grid",
-        "plant",
-        "growing-bed",
-        "growing-bed-corner",
-        "growing-bed-polygon",
-      ].includes(target.getAttribute("class") as string)
-    ) {
+    if (!mouse.ctrl && !moving && mouseIsOverGrowingSpace(target)) {
       plants.unselectAll();
       growingBeds.unselectAllCorners();
     }
     // Add a plant
     if (
       toolbar.selected.includes("plant-") &&
-      [
-        "grid",
-        "growing-bed",
-        "growing-bed-corner",
-        "growing-bed-polygon",
-      ].includes(target.getAttribute("class") as string) &&
-      !moving
+      !moving &&
+      mouseIsOverGrowingSpace(target, ["plant"])
     ) {
       plants.add(
         toolbar.selected.replace("plant-", ""),
@@ -130,14 +128,7 @@ watch(input.mouse, (mouse) => {
     if (
       ["select", "growing-bed"].includes(toolbar.selected) &&
       !moving &&
-      [
-        "grid",
-        "plant",
-        "select-area",
-        "growing-bed",
-        "growing-bed-corner",
-        "growing-bed-polygon",
-      ].includes(target.getAttribute("class") as string)
+      mouseIsOverGrowingSpace(target)
     ) {
       if (!selecting.value) {
         viewport.selectArea.startX = mouse.x;
@@ -192,7 +183,11 @@ watch(input.mouse, (mouse) => {
     }
   }
   // Right mouse button pressed
-  else if (mouse.pressed && mouse.button === 2) {
+  else if (
+    mouse.pressed &&
+    mouse.button === 2 &&
+    mouseIsOverGrowingSpace(target)
+  ) {
     // Move viewport with the mouse
     viewport.x += mouse.moveX;
     viewport.y += mouse.moveY;
