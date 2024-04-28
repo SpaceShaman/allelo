@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import plants from "@/plants";
 import { toolbarStore } from "@/stores";
-import { watch } from "vue";
+import { ref, watch } from "vue";
 
 const toolbar = toolbarStore();
 
@@ -11,6 +11,7 @@ watch(
     if (value === "color-mode") toolbar.selected = oldValue;
   }
 );
+const tab = ref<string>();
 </script>
 
 <template>
@@ -24,6 +25,17 @@ watch(
       :value="`plant-${name}`"
     >
       <PlantIcon :name="name" />
+      <v-tooltip activator="parent" location="bottom">
+        <h2>{{ name.charAt(0).toUpperCase() + name.slice(1) }}</h2>
+        <v-row>
+          <v-col>
+            <h3 class="text-green">Friends</h3>
+          </v-col>
+          <v-col>
+            <h3 class="text-red">Enemies</h3>
+          </v-col>
+        </v-row>
+      </v-tooltip>
     </v-btn>
     <!-- <v-menu>
       <template v-slot:activator="{ props }">
