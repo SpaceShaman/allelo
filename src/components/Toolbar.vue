@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import plants from "@/plants";
 import { toolbarStore } from "@/stores";
-import { watch } from "vue";
+import { ref, watch } from "vue";
 import PlantIcon from "./PlantIcon.vue";
 
 const toolbar = toolbarStore();
@@ -22,6 +22,11 @@ function openMenu(event: MouseEvent, props: any) {
     props.onClick(event);
   }
 }
+const windowHeight = ref<number>(window.innerHeight);
+
+window.addEventListener("resize", () => {
+  windowHeight.value = window.innerHeight;
+});
 </script>
 
 <template>
@@ -47,6 +52,8 @@ function openMenu(event: MouseEvent, props: any) {
     <v-menu
       v-for="(plantName, index) in toolbar.favoritePlants"
       :key="plantName"
+      location="bottom"
+      :max-height="windowHeight - 90"
     >
       <template v-slot:activator="{ isActive, props }">
         <v-btn
