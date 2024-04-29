@@ -81,14 +81,14 @@ const plants: { [name: string]: Plant } = {
     },
     'rhubarb': {
         friends: ['strawberry', 'bean', 'sage', 'beetrootroots', 'garlic'],
-        enemies: ['melons', 'cucumber', 'walnut']
+        enemies: ['melon', 'cucumber', 'walnut']
     },
     'spinach': {
         friends: ['radish', 'lettuce', 'bean', 'carrot'],
-        enemies: ['strawberry', 'broccoli', 'nightshades', 'melons']
+        enemies: ['strawberry', 'broccoli', 'nightshades', 'melon']
     },
     'pumpkin': {
-        friends: ['corn', 'lettuce', 'nasturtiums', 'peas', 'pepper', 'melons'],
+        friends: ['corn', 'lettuce', 'nasturtiums', 'peas', 'pepper', 'melon'],
         enemies: ['cabbage']
     },
     'strawberry': {
