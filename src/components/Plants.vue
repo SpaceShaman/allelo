@@ -5,8 +5,6 @@ import { getPlantSvg } from "@/utils";
 const viewport = viewportStore();
 
 const plants = plantsStore();
-
-plants.add("tomato", { x: 400, y: 600 });
 </script>
 
 <template>

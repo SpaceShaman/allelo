@@ -108,13 +108,13 @@ export const plantsStore = defineStore('plants', () => {
         plant.enemies = [];
         for (const [id, plantedPlant] of Object.entries(planted.value)) {
 
-            const {friends, enemies} = possiblePlants[plantedPlant.name];
+            const {friends, enemies} = possiblePlants[plant.name];
             // check if plantedPlant is in 100px radius of plant
             if (Math.sqrt(Math.pow(plant.position.x - plantedPlant.position.x, 2) + Math.pow(plant.position.y - plantedPlant.position.y, 2)) < 100) {
-                if (friends?.includes(plant.name)) {
+                if (friends?.includes(plantedPlant.name)) {
                     plant.friends?.push(plantedPlant);
                 }
-                if (enemies?.includes(plant.name)) {
+                if (enemies?.includes(plantedPlant.name)) {
                     plant.enemies?.push(plantedPlant);
                 }
             }
