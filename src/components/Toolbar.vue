@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import plants from "@/plants";
 import { toolbarStore } from "@/stores";
-import { ref, watch } from "vue";
+import { watch } from "vue";
 import PlantIcon from "./PlantIcon.vue";
 
 const toolbar = toolbarStore();
@@ -16,7 +16,6 @@ watch(
     if (value === "color-mode") toolbar.selected = oldValue;
   }
 );
-const tab = ref<string>();
 
 function openMenu(event: MouseEvent, props: any) {
   if (event.button === 2) {
@@ -45,25 +44,28 @@ function openMenu(event: MouseEvent, props: any) {
         ><h2>Growing Bed</h2></v-tooltip
       >
     </v-btn>
-    <v-menu v-for="[name, plant] in Object.entries(plants)" :key="name">
+    <v-menu
+      v-for="(plantName, index) in toolbar.favoritePlants"
+      :key="plantName"
+    >
       <template v-slot:activator="{ isActive, props }">
         <v-btn
           @contextmenu.prevent="openMenu($event, props)"
-          :value="`plant-${name}`"
+          :value="`plant-${plantName}`"
         >
-          <PlantIcon :name="name" />
+          <PlantIcon :name="plantName" />
           <v-tooltip activator="parent" location="bottom" v-if="!isActive">
-            <h2>{{ toTitle(name) }}</h2>
+            <h2>{{ toTitle(plantName) }}</h2>
             <v-row>
               <v-col>
                 <h3 class="text-green">Friends</h3>
-                <p v-for="friend in plant.friends" :key="friend">
+                <p v-for="friend in plants[plantName].friends" :key="friend">
                   {{ toTitle(friend) }}
                 </p>
               </v-col>
               <v-col>
                 <h3 class="text-red">Enemies</h3>
-                <p v-for="enemy in plant.enemies" :key="enemy">
+                <p v-for="enemy in plants[plantName].enemies" :key="enemy">
                   {{ toTitle(enemy) }}
                 </p>
               </v-col>
@@ -73,23 +75,26 @@ function openMenu(event: MouseEvent, props: any) {
       </template>
       <v-list>
         <v-list-item
-          v-for="[name, plant] in Object.entries(plants)"
-          :key="name"
-          :value="name"
+          v-for="plantName in toolbar.otherPlants"
+          :key="plantName"
+          @click="
+            toolbar.replaceFavorite(index, plantName);
+            toolbar.selected = `plant-${plantName}`;
+          "
         >
-          <PlantIcon :name="name" />
+          <PlantIcon :name="plantName" />
           <v-tooltip activator="parent" location="right">
-            <h2>{{ toTitle(name) }}</h2>
+            <h2>{{ toTitle(plantName) }}</h2>
             <v-row>
               <v-col>
                 <h3 class="text-green">Friends</h3>
-                <p v-for="friend in plant.friends" :key="friend">
+                <p v-for="friend in plants[plantName].friends" :key="friend">
                   {{ toTitle(friend) }}
                 </p>
               </v-col>
               <v-col>
                 <h3 class="text-red">Enemies</h3>
-                <p v-for="enemy in plant.enemies" :key="enemy">
+                <p v-for="enemy in plants[plantName].enemies" :key="enemy">
                   {{ toTitle(enemy) }}
                 </p>
               </v-col>
