@@ -6,7 +6,7 @@ import { computed, defineModel } from "vue";
 const bed = defineModel<GrowingBed>({
   default: {
     id: 0,
-    polygons: [
+    corners: [
       { x: 0, y: 0 },
       { x: 100, y: 0 },
       { x: 100, y: 100 },
@@ -41,6 +41,22 @@ const top = computed(() => {
 const isSelected = computed(() => {
   return bed.value.corners.some((corner) => corner.selected);
 });
+
+function getDistance(
+  p1: { x: number; y: number },
+  p2: { x: number; y: number }
+) {
+  return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+}
+function getMidPoint(
+  p1: { x: number; y: number },
+  p2: { x: number; y: number }
+) {
+  return { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+}
+function getAngle(p1: { x: number; y: number }, p2: { x: number; y: number }) {
+  return (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI;
+}
 </script>
 
 <template>
@@ -65,6 +81,53 @@ const isSelected = computed(() => {
       stroke="rgb(var(--v-theme-primary))"
       stroke-width="2"
     />
+    <text
+      v-for="(corner, index) in bed.corners"
+      :key="`corner-${corner.id}`"
+      :x="
+        getMidPoint(
+          bed.corners[index],
+          bed.corners[(index + 1) % bed.corners.length]
+        ).x - left
+      "
+      :y="
+        getMidPoint(
+          bed.corners[index],
+          bed.corners[(index + 1) % bed.corners.length]
+        ).y - top
+      "
+      :transform="`rotate(${getAngle(
+        bed.corners[index],
+        bed.corners[(index + 1) % bed.corners.length]
+      )},
+      ${
+        getMidPoint(
+          bed.corners[index],
+          bed.corners[(index + 1) % bed.corners.length]
+        ).x - left
+      },
+      ${
+        getMidPoint(
+          bed.corners[index],
+          bed.corners[(index + 1) % bed.corners.length]
+        ).y - top
+      }
+      )`"
+      :fill="
+        bed.corners[index].selected ||
+        bed.corners[(index + 1) % bed.corners.length].selected
+          ? 'red'
+          : 'rgb(var(--v-theme-primary))'
+      "
+    >
+      {{
+        getDistance(
+          bed.corners[index],
+          bed.corners[(index + 1) % bed.corners.length]
+        ).toFixed(0)
+      }}
+      cm
+    </text>
     <circle
       v-if="isSelected"
       class="growing-bed-corner"
