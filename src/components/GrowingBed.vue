@@ -52,10 +52,30 @@ function getMidPoint(
   p1: { x: number; y: number },
   p2: { x: number; y: number }
 ) {
-  return { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+  const left = Math.min(...bed.value.corners.map((p) => p.x));
+  const top = Math.min(...bed.value.corners.map((p) => p.y));
+  return { x: (p1.x + p2.x) / 2 - left, y: (p1.y + p2.y) / 2 - top };
 }
 function getAngle(p1: { x: number; y: number }, p2: { x: number; y: number }) {
   return (Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180) / Math.PI;
+}
+function getRotationAngle(
+  p1: { x: number; y: number },
+  p2: { x: number; y: number }
+) {
+  const angle = getAngle(p1, p2);
+  if (angle < -90) {
+    return angle + 180;
+  } else if (angle > 90) {
+    return angle - 180;
+  }
+  return angle;
+}
+function getDY(p1: { x: number; y: number }, p2: { x: number; y: number }) {
+  return getAngle(p1, p2) < -90 || getAngle(p1, p2) > 90 ? -5 : 18;
+}
+function getDX(p1: { x: number; y: number }, p2: { x: number; y: number }) {
+  return -`${getDistance(p1, p2).toFixed(0)}cm`.length * 6;
 }
 </script>
 
@@ -81,53 +101,72 @@ function getAngle(p1: { x: number; y: number }, p2: { x: number; y: number }) {
       stroke="rgb(var(--v-theme-primary))"
       stroke-width="2"
     />
-    <text
-      v-for="(corner, index) in bed.corners"
-      :key="`corner-${corner.id}`"
-      :x="
-        getMidPoint(
+    <template v-for="(corner, index) in bed.corners">
+      <text
+        :key="`corner-${corner.id}`"
+        v-if="
+          getDistance(
+            bed.corners[index],
+            bed.corners[(index + 1) % bed.corners.length]
+          ) > 50
+        "
+        :x="
+          getMidPoint(
+            bed.corners[index],
+            bed.corners[(index + 1) % bed.corners.length]
+          ).x
+        "
+        :y="
+          getMidPoint(
+            bed.corners[index],
+            bed.corners[(index + 1) % bed.corners.length]
+          ).y
+        "
+        :dy="
+          getDY(
+            bed.corners[index],
+            bed.corners[(index + 1) % bed.corners.length]
+          )
+        "
+        :dx="
+          getDX(
+            bed.corners[index],
+            bed.corners[(index + 1) % bed.corners.length]
+          )
+        "
+        :transform="`rotate(${getRotationAngle(
           bed.corners[index],
           bed.corners[(index + 1) % bed.corners.length]
-        ).x - left
-      "
-      :y="
-        getMidPoint(
-          bed.corners[index],
-          bed.corners[(index + 1) % bed.corners.length]
-        ).y - top
-      "
-      :transform="`rotate(${getAngle(
-        bed.corners[index],
-        bed.corners[(index + 1) % bed.corners.length]
-      )},
+        )},
       ${
         getMidPoint(
           bed.corners[index],
           bed.corners[(index + 1) % bed.corners.length]
-        ).x - left
+        ).x
       },
       ${
         getMidPoint(
           bed.corners[index],
           bed.corners[(index + 1) % bed.corners.length]
-        ).y - top
+        ).y
       }
       )`"
-      :fill="
-        bed.corners[index].selected ||
-        bed.corners[(index + 1) % bed.corners.length].selected
-          ? 'red'
-          : 'rgb(var(--v-theme-primary))'
-      "
-    >
-      {{
-        getDistance(
-          bed.corners[index],
-          bed.corners[(index + 1) % bed.corners.length]
-        ).toFixed(0)
-      }}
-      cm
-    </text>
+        :fill="
+          bed.corners[index].selected ||
+          bed.corners[(index + 1) % bed.corners.length].selected
+            ? 'red'
+            : 'rgb(var(--v-theme-primary))'
+        "
+        font-size="20"
+      >
+        {{
+          getDistance(
+            bed.corners[index],
+            bed.corners[(index + 1) % bed.corners.length]
+          ).toFixed(0)
+        }}cm
+      </text>
+    </template>
     <circle
       v-if="isSelected"
       class="growing-bed-corner"

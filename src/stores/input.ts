@@ -47,6 +47,9 @@ export const inputStore = defineStore('input', () => {
         mouse.doubleClick.value = Date.now()
     })
     document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey) {
+            e.preventDefault()
+        }
         keyboard.key.value = e.key
         keyboard.ctrl.value = e.ctrlKey
     })
