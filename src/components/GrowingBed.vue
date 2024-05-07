@@ -108,7 +108,7 @@ function getDX(p1: { x: number; y: number }, p2: { x: number; y: number }) {
           getDistance(
             bed.corners[index],
             bed.corners[(index + 1) % bed.corners.length]
-          ) > 50
+          ) > 50 && isSelected
         "
         :x="
           getMidPoint(
