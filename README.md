@@ -11,9 +11,9 @@ https://github.com/SpaceShaman/allelo/assets/1573423/c79b7b9d-5a19-41aa-a419-8ec
 - Show compatibility between plants (allelopathy)
 - Change color of the plants to green or red depending on compatibility
 - Drawing garden beds
-- Selecting elements on the garden
+- Selecting elements on the garden (you can select multiple elements by Selection tool or by holding the ctrl key and clicking on the elements)
 - Moving selected elements (to move multiple elements, hold the ctrl key)
-- Deleting elements from the garden
+- Deleting elements from the garden (press the delete key or middle mouse button)
 - List of plants with their compatibility
 - Selecting plants from the list
 - Zoom in and out
