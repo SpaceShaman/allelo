@@ -18,6 +18,7 @@ https://github.com/SpaceShaman/allelo/assets/1573423/c79b7b9d-5a19-41aa-a419-8ec
 - Zoom in and out
 - Move view around
 - Selecting plants from extended list
+- Dark and light theme
 
 ## Roadmap
 
