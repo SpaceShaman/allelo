@@ -12,6 +12,7 @@ https://github.com/SpaceShaman/allelo/assets/1573423/c79b7b9d-5a19-41aa-a419-8ec
 - Change color of the plants to green or red depending on compatibility
 - Drawing garden beds
 - Selecting elements on the garden
+- Moving selected elements (to move multiple elements, hold the ctrl key)
 - Deleting elements from the garden
 - List of plants with their compatibility
 - Selecting plants from the list
