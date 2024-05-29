@@ -7,4 +7,4 @@ The application will show the user which plants are compatible with each other a
 
 ## Features
 
-[![Watch the video](https://raw.githubusercontent.com/SpaceShaman/allelo/master/.readme/thumbnail.jpg)](https://raw.githubusercontent.com/SpaceShaman/allelo/master/.readme/video.mp4)
+https://github.com/SpaceShaman/allelo/blob/master/.readme/wideo.mp4
