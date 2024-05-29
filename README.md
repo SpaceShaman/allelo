@@ -50,3 +50,16 @@ To add a new plant, add a new entry to the `plants` object in the `src/plants/in
 - [Vue.js](https://vuejs.org/)
 - [Vuetify](https://vuetifyjs.com/)
 - [Pinia](https://pinia.esm.dev/)
+
+## Development
+
+To run the application locally, you need to have Node.js installed. Then you can run the following commands:
+
+```bash
+npm install
+npm run dev
+```
+
+## Thanks
+
+I would like to thank [Katarzyna Rzyska](https://www.linkedin.com/in/katarzyna-rzyska) for creating the plants graphics and all the people involved in the development of the technologies used in this project.
